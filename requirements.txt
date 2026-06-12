@@ -1,0 +1,34 @@
+# Core API
+fastapi==0.136.1
+uvicorn==0.46.0
+starlette==1.0.0
+pydantic==2.13.3
+pydantic_core==2.46.3
+annotated-types==0.7.0
+
+# Database
+psycopg2-binary==2.9.12
+
+# AI / LLM
+anthropic==0.98.1
+
+# Workbook
+openpyxl==3.1.5
+
+# Caching
+cachetools==7.1.1
+
+# HTTP client (anthropic dependency)
+httpx==0.28.1
+httpcore==1.0.9
+h11==0.16.0
+
+# Async
+anyio==4.13.0
+sniffio==1.3.1
+
+# CLI
+click==8.3.3
+
+# Type hints
+typing_extensions==4.15.0

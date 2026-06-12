@@ -1,0 +1,1164 @@
+{
+  "@context": {
+    "clo": "https://cifc.com/ontology/clo-fund#",
+    "dp": "https://cifc.com/ontology/clo-fund/data-product#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "label": "rdfs:label",
+    "definition": "rdfs:comment",
+    "subClassOf": {
+      "@id": "rdfs:subClassOf",
+      "@type": "@id"
+    },
+    "domain": {
+      "@id": "rdfs:domain",
+      "@type": "@id"
+    },
+    "range": {
+      "@id": "rdfs:range",
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@id": "clo:CLOFund-Ontology",
+      "@type": "owl:Ontology",
+      "label": "DKIG CLO Fund Domain Ontology",
+      "definition": "Formal vocabulary enabling AI agents to interpret and query CLO fund data products. Companion to CLO_Fund_Domain_Data.xlsx.",
+      "owl:versionInfo": "1.0.0",
+      "dataReportingDate": "2026-04-30"
+    },
+    {
+      "@id": "clo:CLOFund",
+      "@type": "owl:Class",
+      "label": "CLO Fund",
+      "definition": "A Collateralised Loan Obligation fund \u2014 a special purpose vehicle that holds a portfolio of loans and issues tranched debt and equity to investors.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:FundIndenture",
+      "@type": "owl:Class",
+      "label": "Fund Indenture",
+      "definition": "Legal document governing the fund's operation \u2014 defines tests, covenants, fees, waterfall, and eligible asset criteria.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:FundObjective",
+      "@type": "owl:Class",
+      "label": "Fund Objective",
+      "definition": "Investment mandate and return objective of the fund.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:Tranche",
+      "@type": "owl:Class",
+      "label": "Tranche",
+      "definition": "A class of debt issued by the CLO fund with defined seniority, coupon, and rating.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:SeniorTranche",
+      "@type": "owl:Class",
+      "label": "Senior Tranche",
+      "definition": "The most senior-ranking debt class (Class A), first to receive interest and principal payments.",
+      "subClassOf": "clo:Tranche"
+    },
+    {
+      "@id": "clo:MezzanineTranche",
+      "@type": "owl:Class",
+      "label": "Mezzanine Tranche",
+      "definition": "Debt classes ranking below senior (Class B/C/D/E) \u2014 higher yield, higher risk.",
+      "subClassOf": "clo:Tranche"
+    },
+    {
+      "@id": "clo:SubordinatedNotes",
+      "@type": "owl:Class",
+      "label": "Subordinated Notes",
+      "definition": "Most junior debt tranche, immediately above equity in the waterfall.",
+      "subClassOf": "clo:Tranche"
+    },
+    {
+      "@id": "clo:EquityPiece",
+      "@type": "owl:Class",
+      "label": "Equity / Preference Shares",
+      "definition": "Residual interest \u2014 receives cashflows after all debt tranches are paid. Bears first loss.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:LoanAsset",
+      "@type": "owl:Class",
+      "label": "Loan Asset",
+      "definition": "Debt instrument held as collateral in the fund's asset pool.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:SyndicatedLoan",
+      "@type": "owl:Class",
+      "label": "Syndicated Loan",
+      "definition": "Broadly syndicated senior secured leveraged loan \u2014 primary asset type in a CLO.",
+      "subClassOf": "clo:LoanAsset"
+    },
+    {
+      "@id": "clo:PrivateCreditLoan",
+      "@type": "owl:Class",
+      "label": "Private Credit Loan",
+      "definition": "Directly originated, privately negotiated loan \u2014 middle-market or unitranche facilities.",
+      "subClassOf": "clo:LoanAsset"
+    },
+    {
+      "@id": "clo:Obligor",
+      "@type": "owl:Class",
+      "label": "Obligor",
+      "definition": "Corporate borrower that issued the loan asset.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:Waterfall",
+      "@type": "owl:Class",
+      "label": "Payment Waterfall",
+      "definition": "Contractually defined priority sequence in which cashflows are distributed.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:ComplianceTest",
+      "@type": "owl:Class",
+      "label": "Compliance Test",
+      "definition": "Coverage or quality test defined in the indenture that must be satisfied for equity distributions to continue.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:OCTest",
+      "@type": "owl:Class",
+      "label": "OC Test",
+      "definition": "Overcollateralisation test \u2014 checks if par value of collateral sufficiently exceeds tranche notional.",
+      "subClassOf": "clo:ComplianceTest"
+    },
+    {
+      "@id": "clo:ICTest",
+      "@type": "owl:Class",
+      "label": "IC Test",
+      "definition": "Interest Coverage test \u2014 checks if interest income covers interest payable on a tranche class.",
+      "subClassOf": "clo:ComplianceTest"
+    },
+    {
+      "@id": "clo:DiversityTest",
+      "@type": "owl:Class",
+      "label": "Diversity Test",
+      "definition": "Tests whether portfolio is sufficiently diversified per Moody's diversity score methodology.",
+      "subClassOf": "clo:ComplianceTest"
+    },
+    {
+      "@id": "clo:CashflowEvent",
+      "@type": "owl:Class",
+      "label": "Cashflow Event",
+      "definition": "A discrete cash movement \u2014 income from assets or disbursements to liabilities.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:InterestPayment",
+      "@type": "owl:Class",
+      "label": "Interest Payment",
+      "definition": "Cash received from an obligor as scheduled interest on a loan.",
+      "subClassOf": "clo:CashflowEvent"
+    },
+    {
+      "@id": "clo:PrincipalPayment",
+      "@type": "owl:Class",
+      "label": "Principal Payment",
+      "definition": "Cash received as scheduled or unscheduled repayment of loan principal.",
+      "subClassOf": "clo:CashflowEvent"
+    },
+    {
+      "@id": "clo:TrancheDistribution",
+      "@type": "owl:Class",
+      "label": "Tranche Distribution",
+      "definition": "Cash disbursed to a tranche class as interest or principal per the waterfall.",
+      "subClassOf": "clo:CashflowEvent"
+    },
+    {
+      "@id": "clo:EquityDistribution",
+      "@type": "owl:Class",
+      "label": "Equity Distribution",
+      "definition": "Residual cash disbursed to equity holders after all senior obligations are met.",
+      "subClassOf": "clo:CashflowEvent"
+    },
+    {
+      "@id": "clo:FeeExpense",
+      "@type": "owl:Class",
+      "label": "Fee / Expense",
+      "definition": "Cost incurred by the fund \u2014 management, incentive, trustee, taxes.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:ManagementFee",
+      "@type": "owl:Class",
+      "label": "Management Fee",
+      "definition": "Fee paid to the CLO manager \u2014 typically a fixed percentage of fund assets.",
+      "subClassOf": "clo:FeeExpense"
+    },
+    {
+      "@id": "clo:IncentiveFee",
+      "@type": "owl:Class",
+      "label": "Incentive Fee",
+      "definition": "Performance-based fee paid above a hurdle rate. Also called subordinated management fee.",
+      "subClassOf": "clo:FeeExpense"
+    },
+    {
+      "@id": "clo:PerformanceSnapshot",
+      "@type": "owl:Class",
+      "label": "Performance Snapshot",
+      "definition": "Time-stamped record of fund-level performance (NAV, IRR, P&L, returns).",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:KeyMetricSnapshot",
+      "@type": "owl:Class",
+      "label": "Key Metric Snapshot",
+      "definition": "Time-stamped record of portfolio quality metrics (WARF, WAS, diversity, WAL).",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:RatingAssessment",
+      "@type": "owl:Class",
+      "label": "Rating Assessment",
+      "definition": "Credit rating assigned to a loan asset, tranche, or obligor by a rating agency.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:RatingAgency",
+      "@type": "owl:Class",
+      "label": "Rating Agency",
+      "definition": "External credit rating organisation. Instances: Moody's, S&P, Fitch.",
+      "subClassOf": "owl:Thing"
+    },
+    {
+      "@id": "clo:hasAsset",
+      "@type": "owl:ObjectProperty",
+      "label": "has asset",
+      "domain": "clo:CLOFund",
+      "range": "clo:LoanAsset",
+      "cardinality": "1..*",
+      "definition": "The fund holds one or more loan assets in its collateral pool."
+    },
+    {
+      "@id": "clo:hasTranche",
+      "@type": "owl:ObjectProperty",
+      "label": "has tranche",
+      "domain": "clo:CLOFund",
+      "range": "clo:Tranche",
+      "cardinality": "2..*",
+      "definition": "The fund issues two or more debt tranches to investors."
+    },
+    {
+      "@id": "clo:hasEquity",
+      "@type": "owl:ObjectProperty",
+      "label": "has equity",
+      "domain": "clo:CLOFund",
+      "range": "clo:EquityPiece",
+      "cardinality": "1",
+      "definition": "The fund has exactly one equity piece (preference shares)."
+    },
+    {
+      "@id": "clo:governedBy",
+      "@type": "owl:ObjectProperty",
+      "label": "governed by",
+      "domain": "clo:CLOFund",
+      "range": "clo:FundIndenture",
+      "cardinality": "1",
+      "definition": "The fund is legally governed by exactly one indenture."
+    },
+    {
+      "@id": "clo:hasObjective",
+      "@type": "owl:ObjectProperty",
+      "label": "has objective",
+      "domain": "clo:CLOFund",
+      "range": "clo:FundObjective",
+      "cardinality": "1",
+      "definition": "The fund has a stated investment objective."
+    },
+    {
+      "@id": "clo:hasComplianceTest",
+      "@type": "owl:ObjectProperty",
+      "label": "has compliance test",
+      "domain": "clo:CLOFund",
+      "range": "clo:ComplianceTest",
+      "cardinality": "1..*",
+      "definition": "The fund is subject to one or more compliance tests."
+    },
+    {
+      "@id": "clo:hasFee",
+      "@type": "owl:ObjectProperty",
+      "label": "has fee",
+      "domain": "clo:CLOFund",
+      "range": "clo:FeeExpense",
+      "cardinality": "1..*",
+      "definition": "The fund incurs one or more types of fees/expenses."
+    },
+    {
+      "@id": "clo:hasPerformanceSnapshot",
+      "@type": "owl:ObjectProperty",
+      "label": "has performance snapshot",
+      "domain": "clo:CLOFund",
+      "range": "clo:PerformanceSnapshot",
+      "cardinality": "1..*",
+      "definition": "The fund has one performance snapshot per reporting period."
+    },
+    {
+      "@id": "clo:hasKeyMetrics",
+      "@type": "owl:ObjectProperty",
+      "label": "has key metrics",
+      "domain": "clo:CLOFund",
+      "range": "clo:KeyMetricSnapshot",
+      "cardinality": "1..*",
+      "definition": "The fund has one key metrics snapshot per reporting period."
+    },
+    {
+      "@id": "clo:hasObligor",
+      "@type": "owl:ObjectProperty",
+      "label": "has obligor",
+      "domain": "clo:LoanAsset",
+      "range": "clo:Obligor",
+      "cardinality": "1",
+      "definition": "Each loan asset has exactly one obligor (borrower)."
+    },
+    {
+      "@id": "clo:hasCashflow",
+      "@type": "owl:ObjectProperty",
+      "label": "has cashflow",
+      "domain": "clo:LoanAsset",
+      "range": "clo:CashflowEvent",
+      "cardinality": "0..*",
+      "definition": "A loan asset generates zero or more cashflow events."
+    },
+    {
+      "@id": "clo:hasRating",
+      "@type": "owl:ObjectProperty",
+      "label": "has rating",
+      "domain": "clo:LoanAsset",
+      "range": "clo:RatingAssessment",
+      "cardinality": "0..*",
+      "definition": "A loan asset has ratings from one or more agencies."
+    },
+    {
+      "@id": "clo:ratedBy",
+      "@type": "owl:ObjectProperty",
+      "label": "rated by",
+      "domain": "clo:RatingAssessment",
+      "range": "clo:RatingAgency",
+      "cardinality": "1",
+      "definition": "A rating assessment is issued by exactly one rating agency."
+    },
+    {
+      "@id": "clo:seniorTo",
+      "@type": "owl:ObjectProperty",
+      "label": "senior to",
+      "domain": "clo:Tranche",
+      "range": "clo:Tranche",
+      "cardinality": "0..*",
+      "definition": "A tranche ranks senior to one or more other tranches in the waterfall."
+    },
+    {
+      "@id": "clo:distributedVia",
+      "@type": "owl:ObjectProperty",
+      "label": "distributed via",
+      "domain": "clo:CashflowEvent",
+      "range": "clo:Waterfall",
+      "cardinality": "0..1",
+      "definition": "A liability cashflow is distributed via the waterfall mechanism."
+    },
+    {
+      "@id": "clo:coveredByTest",
+      "@type": "owl:ObjectProperty",
+      "label": "covered by test",
+      "domain": "clo:Tranche",
+      "range": "clo:ComplianceTest",
+      "cardinality": "1..*",
+      "definition": "A tranche class is protected by one or more compliance tests."
+    },
+    {
+      "@id": "clo:appliesToFund",
+      "@type": "owl:ObjectProperty",
+      "label": "applies to fund",
+      "domain": "clo:ComplianceTest",
+      "range": "clo:CLOFund",
+      "cardinality": "1",
+      "definition": "A compliance test applies to exactly one fund."
+    },
+    {
+      "@id": "clo:hasObligorRating",
+      "@type": "owl:ObjectProperty",
+      "label": "has obligor rating",
+      "domain": "clo:Obligor",
+      "range": "clo:RatingAssessment",
+      "cardinality": "0..*",
+      "definition": "An obligor has ratings from credit agencies."
+    },
+    {
+      "@id": "clo:distributesTo",
+      "@type": "owl:ObjectProperty",
+      "label": "distributes to",
+      "domain": "clo:Waterfall",
+      "range": "clo:Tranche",
+      "cardinality": "2..*",
+      "definition": "The waterfall distributes proceeds to each tranche in priority order."
+    },
+    {
+      "@id": "clo:fundName",
+      "@type": "owl:DatatypeProperty",
+      "label": "fund name",
+      "domain": "clo:CLOFund",
+      "range": "xsd:string",
+      "definition": "Legal name of the CLO fund."
+    },
+    {
+      "@id": "clo:vintageYear",
+      "@type": "owl:DatatypeProperty",
+      "label": "vintage year",
+      "domain": "clo:CLOFund",
+      "range": "xsd:integer",
+      "definition": "Year the fund closed."
+    },
+    {
+      "@id": "clo:targetPar",
+      "@type": "owl:DatatypeProperty",
+      "label": "target par",
+      "domain": "clo:CLOFund",
+      "range": "xsd:decimal",
+      "definition": "Target collateral par amount at close (USD)."
+    },
+    {
+      "@id": "clo:reinvestmentPeriodEnd",
+      "@type": "owl:DatatypeProperty",
+      "label": "reinvestment period end",
+      "domain": "clo:CLOFund",
+      "range": "xsd:date",
+      "definition": "Date after which principal proceeds cannot be reinvested."
+    },
+    {
+      "@id": "clo:nonCallPeriodEnd",
+      "@type": "owl:DatatypeProperty",
+      "label": "non-call period end",
+      "domain": "clo:CLOFund",
+      "range": "xsd:date",
+      "definition": "Date before which the fund cannot be optionally redeemed."
+    },
+    {
+      "@id": "clo:legalMaturity",
+      "@type": "owl:DatatypeProperty",
+      "label": "legal maturity",
+      "domain": "clo:CLOFund",
+      "range": "xsd:date",
+      "definition": "Legal final maturity date of the fund."
+    },
+    {
+      "@id": "clo:baseCurrency",
+      "@type": "owl:DatatypeProperty",
+      "label": "base currency",
+      "domain": "clo:CLOFund",
+      "range": "xsd:string",
+      "definition": "Base currency of the fund (typically USD)."
+    },
+    {
+      "@id": "clo:managerName",
+      "@type": "owl:DatatypeProperty",
+      "label": "manager name",
+      "domain": "clo:CLOFund",
+      "range": "xsd:string",
+      "definition": "Name of the CLO collateral manager."
+    },
+    {
+      "@id": "clo:parValue",
+      "@type": "owl:DatatypeProperty",
+      "label": "par value",
+      "domain": "clo:LoanAsset",
+      "range": "xsd:decimal",
+      "definition": "Par (face) value of the position held (USD)."
+    },
+    {
+      "@id": "clo:marketValue",
+      "@type": "owl:DatatypeProperty",
+      "label": "market value",
+      "domain": "clo:LoanAsset",
+      "range": "xsd:decimal",
+      "definition": "Current market value of the position (USD)."
+    },
+    {
+      "@id": "clo:price",
+      "@type": "owl:DatatypeProperty",
+      "label": "price",
+      "domain": "clo:LoanAsset",
+      "range": "xsd:decimal",
+      "definition": "Current market price (% of par)."
+    },
+    {
+      "@id": "clo:spread",
+      "@type": "owl:DatatypeProperty",
+      "label": "spread",
+      "domain": "clo:LoanAsset",
+      "range": "xsd:decimal",
+      "definition": "Spread over SOFR in basis points."
+    },
+    {
+      "@id": "clo:maturityDate",
+      "@type": "owl:DatatypeProperty",
+      "label": "maturity date",
+      "domain": "clo:LoanAsset",
+      "range": "xsd:date",
+      "definition": "Scheduled maturity date of the loan."
+    },
+    {
+      "@id": "clo:loanType",
+      "@type": "owl:DatatypeProperty",
+      "label": "loan type",
+      "domain": "clo:LoanAsset",
+      "range": "xsd:string",
+      "definition": "First lien, second lien, unitranche, revolver, etc."
+    },
+    {
+      "@id": "clo:isPIK",
+      "@type": "owl:DatatypeProperty",
+      "label": "is PIK",
+      "domain": "clo:LoanAsset",
+      "range": "xsd:boolean",
+      "definition": "Whether the loan pays interest in kind."
+    },
+    {
+      "@id": "clo:isCovenantLite",
+      "@type": "owl:DatatypeProperty",
+      "label": "is covenant-lite",
+      "domain": "clo:LoanAsset",
+      "range": "xsd:boolean",
+      "definition": "Whether the loan lacks maintenance financial covenants."
+    },
+    {
+      "@id": "clo:industryCode",
+      "@type": "owl:DatatypeProperty",
+      "label": "industry code",
+      "domain": "clo:LoanAsset",
+      "range": "xsd:string",
+      "definition": "Industry classification per Moody's or S&P taxonomy."
+    },
+    {
+      "@id": "clo:trancheClass",
+      "@type": "owl:DatatypeProperty",
+      "label": "tranche class",
+      "domain": "clo:Tranche",
+      "range": "xsd:string",
+      "definition": "Class designation (A, B, C, D, E, Sub Notes)."
+    },
+    {
+      "@id": "clo:initialNotional",
+      "@type": "owl:DatatypeProperty",
+      "label": "initial notional",
+      "domain": "clo:Tranche",
+      "range": "xsd:decimal",
+      "definition": "Original notional amount at issuance (USD)."
+    },
+    {
+      "@id": "clo:currentNotional",
+      "@type": "owl:DatatypeProperty",
+      "label": "current notional",
+      "domain": "clo:Tranche",
+      "range": "xsd:decimal",
+      "definition": "Current outstanding notional after any amortisation."
+    },
+    {
+      "@id": "clo:couponRate",
+      "@type": "owl:DatatypeProperty",
+      "label": "coupon rate",
+      "domain": "clo:Tranche",
+      "range": "xsd:decimal",
+      "definition": "Coupon rate in basis points (SOFR+)."
+    },
+    {
+      "@id": "clo:subordinationLevel",
+      "@type": "owl:DatatypeProperty",
+      "label": "subordination level",
+      "domain": "clo:Tranche",
+      "range": "xsd:decimal",
+      "definition": "Percentage of fund assets subordinated to this tranche."
+    },
+    {
+      "@id": "clo:waterfallPriority",
+      "@type": "owl:DatatypeProperty",
+      "label": "waterfall priority",
+      "domain": "clo:Tranche",
+      "range": "xsd:integer",
+      "definition": "Numeric rank in payment waterfall (1 = most senior)."
+    },
+    {
+      "@id": "clo:testName",
+      "@type": "owl:DatatypeProperty",
+      "label": "test name",
+      "domain": "clo:ComplianceTest",
+      "range": "xsd:string",
+      "definition": "Name of the test (e.g. 'Class A/B OC Test')."
+    },
+    {
+      "@id": "clo:currentValue",
+      "@type": "owl:DatatypeProperty",
+      "label": "current value",
+      "domain": "clo:ComplianceTest",
+      "range": "xsd:decimal",
+      "definition": "Current computed ratio or score."
+    },
+    {
+      "@id": "clo:threshold",
+      "@type": "owl:DatatypeProperty",
+      "label": "threshold",
+      "domain": "clo:ComplianceTest",
+      "range": "xsd:decimal",
+      "definition": "Minimum passing value per indenture."
+    },
+    {
+      "@id": "clo:cushion",
+      "@type": "owl:DatatypeProperty",
+      "label": "cushion",
+      "domain": "clo:ComplianceTest",
+      "range": "xsd:decimal",
+      "definition": "Difference between current value and threshold (positive = passing)."
+    },
+    {
+      "@id": "clo:passFail",
+      "@type": "owl:DatatypeProperty",
+      "label": "pass/fail",
+      "domain": "clo:ComplianceTest",
+      "range": "xsd:boolean",
+      "definition": "True if the test is currently passing."
+    },
+    {
+      "@id": "clo:breachConsequence",
+      "@type": "owl:DatatypeProperty",
+      "label": "breach consequence",
+      "domain": "clo:ComplianceTest",
+      "range": "xsd:string",
+      "definition": "What happens if the test fails (e.g. OC diversion, reinvestment suspension)."
+    },
+    {
+      "@id": "clo:reportingDate",
+      "@type": "owl:DatatypeProperty",
+      "label": "reporting date",
+      "domain": "clo:PerformanceSnapshot",
+      "range": "xsd:date",
+      "definition": "Date of the performance measurement."
+    },
+    {
+      "@id": "clo:nav",
+      "@type": "owl:DatatypeProperty",
+      "label": "NAV",
+      "domain": "clo:PerformanceSnapshot",
+      "range": "xsd:decimal",
+      "definition": "Net Asset Value of the fund (USD)."
+    },
+    {
+      "@id": "clo:equityNAV",
+      "@type": "owl:DatatypeProperty",
+      "label": "equity NAV",
+      "domain": "clo:PerformanceSnapshot",
+      "range": "xsd:decimal",
+      "definition": "NAV attributable to equity holders (USD)."
+    },
+    {
+      "@id": "clo:grossIRR",
+      "@type": "owl:DatatypeProperty",
+      "label": "gross IRR",
+      "domain": "clo:PerformanceSnapshot",
+      "range": "xsd:decimal",
+      "definition": "Gross IRR inception to date (%)."
+    },
+    {
+      "@id": "clo:netIRR",
+      "@type": "owl:DatatypeProperty",
+      "label": "net IRR",
+      "domain": "clo:PerformanceSnapshot",
+      "range": "xsd:decimal",
+      "definition": "Net IRR after fees inception to date (%)."
+    },
+    {
+      "@id": "clo:dpi",
+      "@type": "owl:DatatypeProperty",
+      "label": "DPI",
+      "domain": "clo:PerformanceSnapshot",
+      "range": "xsd:decimal",
+      "definition": "Distributions to Paid-In ratio."
+    },
+    {
+      "@id": "clo:rvpi",
+      "@type": "owl:DatatypeProperty",
+      "label": "RVPI",
+      "domain": "clo:PerformanceSnapshot",
+      "range": "xsd:decimal",
+      "definition": "Residual Value to Paid-In ratio."
+    },
+    {
+      "@id": "clo:tvpi",
+      "@type": "owl:DatatypeProperty",
+      "label": "TVPI",
+      "domain": "clo:PerformanceSnapshot",
+      "range": "xsd:decimal",
+      "definition": "Total Value to Paid-In ratio (DPI + RVPI)."
+    },
+    {
+      "@id": "clo:warf",
+      "@type": "owl:DatatypeProperty",
+      "label": "WARF",
+      "domain": "clo:KeyMetricSnapshot",
+      "range": "xsd:decimal",
+      "definition": "Weighted Average Rating Factor (Moody's)."
+    },
+    {
+      "@id": "clo:weightedAverageSpread",
+      "@type": "owl:DatatypeProperty",
+      "label": "weighted avg spread",
+      "domain": "clo:KeyMetricSnapshot",
+      "range": "xsd:decimal",
+      "definition": "Weighted average asset spread in bps over SOFR."
+    },
+    {
+      "@id": "clo:weightedAverageLife",
+      "@type": "owl:DatatypeProperty",
+      "label": "WAL",
+      "domain": "clo:KeyMetricSnapshot",
+      "range": "xsd:decimal",
+      "definition": "Weighted average life in years."
+    },
+    {
+      "@id": "clo:diversityScore",
+      "@type": "owl:DatatypeProperty",
+      "label": "diversity score",
+      "domain": "clo:KeyMetricSnapshot",
+      "range": "xsd:decimal",
+      "definition": "Moody's diversity score for the portfolio."
+    },
+    {
+      "@id": "clo:WaterfallPriorityAxiom",
+      "@type": "owl:NamedIndividual",
+      "label": "Payment Waterfall Priority Order",
+      "definition": "The contractual order in which collected proceeds are distributed each payment date.",
+      "priorityOrder": [
+        "1. Senior Expenses (Trustee Fees, Rating Agency Fees, Taxes, Administration)",
+        "2. Class A Interest",
+        "3. Class A OC Test \u2014 if failing, divert proceeds to repay Class A principal until test passes",
+        "4. Class A IC Test \u2014 if failing, divert proceeds to repay Class A principal",
+        "5. Class B Interest \u2192 Class B OC Test \u2192 Class B IC Test \u2192 repeat for C, D, E",
+        "6. Senior Management Fee",
+        "7. Subordinated Notes Interest",
+        "8. Incentive Fee / Subordinated Management Fee",
+        "9. Equity Distribution \u2014 residual to preference shareholders"
+      ],
+      "rule": "If any OC or IC test fails, cash is redirected to repay the most senior tranche principal. Equity receives nothing until all tests pass."
+    },
+    {
+      "@id": "clo:OCTestFormulaAxiom",
+      "@type": "owl:NamedIndividual",
+      "label": "OC Test Formula & Adjustments",
+      "definition": "How the overcollateralisation ratio is computed and adjusted.",
+      "formula": "OC Ratio = Par Value of Eligible Collateral \u00f7 Notional of Covered Tranches",
+      "cccAdjustment": "CCC/Caa-rated assets above the bucket threshold are haircut to their market value (not par) for OC calculation.",
+      "defaultedAssetAdjustment": "Defaulted assets are valued at the lower of market value and assumed recovery rate.",
+      "passCondition": "OC Ratio \u2265 OC Threshold (typically 120\u2013150% for senior classes per indenture).",
+      "breachConsequence": "All principal and interest proceeds are diverted to repay the most senior outstanding tranche until the test passes. Equity distributions cease."
+    },
+    {
+      "@id": "clo:ReinvestmentPeriodAxiom",
+      "@type": "owl:NamedIndividual",
+      "label": "Reinvestment Period Behaviour",
+      "definition": "Rules governing how principal proceeds are handled before vs after the reinvestment period end date.",
+      "duringReinvestment": "If clo:reinvestmentPeriodEnd > today, principal proceeds may be reinvested in new eligible collateral. Manager has discretion subject to eligibility tests.",
+      "afterReinvestment": "Principal proceeds must be applied to repay tranches in waterfall order (senior first). Fund begins amortising. Manager can still trade for credit-quality maintenance but cannot grow the portfolio."
+    },
+    {
+      "@id": "clo:RatingDerivedRulesAxiom",
+      "@type": "owl:NamedIndividual",
+      "label": "Rating-Derived Asset Classifications",
+      "definition": "Classification rules an agent applies based on rating data.",
+      "cccDefinition": "An asset rated Caa1 / CCC+ or below is classified as a CCC Asset.",
+      "cccBucketRule": "CCC Assets exceeding the indenture threshold (typically 7.5% of portfolio par) are haircut to market value in OC test calculations.",
+      "defaultedDefinition": "An asset is Defaulted if the obligor has filed for bankruptcy, missed a payment, or been classified as defaulted by the controlling rating agency.",
+      "warfDefinition": "WARF = weighted average of Moody's rating factors by par value. Each rating maps to a numeric factor per Moody's table (e.g. Baa3 = 610, B1 = 940, Caa1 = 3490)."
+    },
+    {
+      "@id": "dp:DP-01",
+      "@type": "dp:DataProduct",
+      "label": "Fund Static Profile",
+      "temporalNature": "Static",
+      "sheet": "DP-01 Static Profile",
+      "workbookFile": "CLO_Fund_Domain_Data.xlsx",
+      "primaryClasses": [
+        "clo:CLOFund",
+        "clo:FundIndenture",
+        "clo:FundObjective"
+      ],
+      "updateFrequency": "One-time at fund close; amended only by indenture supplement",
+      "qualitySLA": "100% completeness at fund close; zero-tolerance for indenture term errors",
+      "sourceSystems": [
+        "Intex (structure)",
+        "Kanerai (indenture)",
+        "Fund Administrator"
+      ]
+    },
+    {
+      "@id": "dp:DP-02",
+      "@type": "dp:DataProduct",
+      "label": "Fund Portfolio Snapshot",
+      "temporalNature": "Dynamic",
+      "sheet": "DP-02 Portfolio Snapshot",
+      "workbookFile": "CLO_Fund_Domain_Data.xlsx",
+      "primaryClasses": [
+        "clo:LoanAsset",
+        "clo:Obligor",
+        "clo:RatingAssessment"
+      ],
+      "updateFrequency": "Daily (prices); Weekly (ratings, metrics); Monthly (full report)",
+      "qualitySLA": "Prices T+0 EOD; Ratings within 24h of agency action; 99.9% completeness",
+      "sourceSystems": [
+        "Bloomberg",
+        "LSTA",
+        "Clear Par",
+        "Moody's/S&P/Fitch",
+        "Intex"
+      ]
+    },
+    {
+      "@id": "dp:DP-03",
+      "@type": "dp:DataProduct",
+      "label": "Fund Performance Metrics",
+      "temporalNature": "Dynamic",
+      "sheet": "DP-03 Performance",
+      "workbookFile": "CLO_Fund_Domain_Data.xlsx",
+      "primaryClasses": [
+        "clo:PerformanceSnapshot"
+      ],
+      "updateFrequency": "Monthly (NAV, P&L); Quarterly (IRR, DPI, RVPI); Daily (estimated NAV)",
+      "qualitySLA": "Monthly NAV within 10 business days of month end; Quarterly report within 30 days",
+      "sourceSystems": [
+        "Fund Administrator",
+        "Bloomberg (benchmark)",
+        "Internal OMS/PMS"
+      ]
+    },
+    {
+      "@id": "dp:DP-04",
+      "@type": "dp:DataProduct",
+      "label": "Fund Compliance Dashboard",
+      "temporalNature": "Dynamic",
+      "sheet": "DP-04 Compliance",
+      "workbookFile": "CLO_Fund_Domain_Data.xlsx",
+      "primaryClasses": [
+        "clo:ComplianceTest",
+        "clo:OCTest",
+        "clo:ICTest",
+        "clo:DiversityTest"
+      ],
+      "updateFrequency": "Daily (monitoring); Payment date (formal indenture determination)",
+      "qualitySLA": "Test status updated T+1 after rating action or portfolio change",
+      "sourceSystems": [
+        "Intex (calculations)",
+        "Kanerai (covenant monitoring)",
+        "Internal risk systems"
+      ]
+    },
+    {
+      "@id": "dp:DP-05",
+      "@type": "dp:DataProduct",
+      "label": "Fund Cashflow Statement",
+      "temporalNature": "Dynamic",
+      "sheet": "DP-05 Cashflows",
+      "workbookFile": "CLO_Fund_Domain_Data.xlsx",
+      "primaryClasses": [
+        "clo:CashflowEvent",
+        "clo:Waterfall",
+        "clo:TrancheDistribution",
+        "clo:EquityDistribution"
+      ],
+      "updateFrequency": "Per payment period (typically quarterly); intra-period accruals daily",
+      "qualitySLA": "Official waterfall report published within 2 business days of each payment date",
+      "sourceSystems": [
+        "Trustee",
+        "Clear Par",
+        "Bloomberg (accruals)"
+      ]
+    },
+    {
+      "@id": "dp:DP-06",
+      "@type": "dp:DataProduct",
+      "label": "Fund Fee & Expense Ledger",
+      "temporalNature": "Dynamic",
+      "sheet": "DP-06 Fees",
+      "workbookFile": "CLO_Fund_Domain_Data.xlsx",
+      "primaryClasses": [
+        "clo:FeeExpense",
+        "clo:ManagementFee",
+        "clo:IncentiveFee"
+      ],
+      "updateFrequency": "Monthly (accruals); Per payment period (actual payments)",
+      "qualitySLA": "Monthly accruals reconciled within 5 business days of month end",
+      "sourceSystems": [
+        "Fund Administrator",
+        "Internal fee calculation engine"
+      ]
+    },
+    {
+      "@id": "dp:DP-07",
+      "@type": "dp:DataProduct",
+      "label": "Fund Key Metrics Tracker",
+      "temporalNature": "Dynamic",
+      "sheet": "DP-07 Key Metrics",
+      "workbookFile": "CLO_Fund_Domain_Data.xlsx",
+      "primaryClasses": [
+        "clo:KeyMetricSnapshot"
+      ],
+      "updateFrequency": "Daily (price-sensitive); Weekly (full metric set)",
+      "qualitySLA": "Daily metrics by 8am next business day; Weekly report Monday morning",
+      "sourceSystems": [
+        "Moody's (WARF)",
+        "Bloomberg (prices/spreads)",
+        "Aggregation from DP-02"
+      ]
+    },
+    {
+      "@id": "dp:DP-08",
+      "@type": "dp:DataProduct",
+      "label": "Fund Liability Structure",
+      "temporalNature": "Mixed",
+      "sheet": "DP-08 Liability Structure",
+      "workbookFile": "CLO_Fund_Domain_Data.xlsx",
+      "primaryClasses": [
+        "clo:Tranche",
+        "clo:SeniorTranche",
+        "clo:MezzanineTranche",
+        "clo:SubordinatedNotes",
+        "clo:EquityPiece"
+      ],
+      "updateFrequency": "Static (structure); Ratings within 24h of agency action; Notional each payment date",
+      "qualitySLA": "Structural data static at close; Ratings 24h SLA; Notional updated each payment date",
+      "sourceSystems": [
+        "Intex",
+        "Kanerai",
+        "Moody's/S&P/Fitch"
+      ]
+    },
+    {
+      "@id": "clo:retrievalMap",
+      "@type": "owl:NamedIndividual",
+      "label": "Class to Data Product Retrieval Map",
+      "definition": "For each ontology class, the data product(s) an agent should query to retrieve instances and current values.",
+      "mappings": [
+        {
+          "class": "clo:CLOFund",
+          "dataProducts": [
+            "dp:DP-01"
+          ]
+        },
+        {
+          "class": "clo:FundIndenture",
+          "dataProducts": [
+            "dp:DP-01"
+          ]
+        },
+        {
+          "class": "clo:FundObjective",
+          "dataProducts": [
+            "dp:DP-01"
+          ]
+        },
+        {
+          "class": "clo:LoanAsset",
+          "dataProducts": [
+            "dp:DP-02"
+          ]
+        },
+        {
+          "class": "clo:Obligor",
+          "dataProducts": [
+            "dp:DP-02"
+          ]
+        },
+        {
+          "class": "clo:RatingAssessment",
+          "dataProducts": [
+            "dp:DP-02",
+            "dp:DP-08"
+          ]
+        },
+        {
+          "class": "clo:Tranche",
+          "dataProducts": [
+            "dp:DP-08"
+          ]
+        },
+        {
+          "class": "clo:EquityPiece",
+          "dataProducts": [
+            "dp:DP-08"
+          ]
+        },
+        {
+          "class": "clo:ComplianceTest",
+          "dataProducts": [
+            "dp:DP-04"
+          ]
+        },
+        {
+          "class": "clo:OCTest",
+          "dataProducts": [
+            "dp:DP-04"
+          ]
+        },
+        {
+          "class": "clo:ICTest",
+          "dataProducts": [
+            "dp:DP-04"
+          ]
+        },
+        {
+          "class": "clo:DiversityTest",
+          "dataProducts": [
+            "dp:DP-04"
+          ]
+        },
+        {
+          "class": "clo:CashflowEvent",
+          "dataProducts": [
+            "dp:DP-05"
+          ]
+        },
+        {
+          "class": "clo:Waterfall",
+          "dataProducts": [
+            "dp:DP-05"
+          ]
+        },
+        {
+          "class": "clo:TrancheDistribution",
+          "dataProducts": [
+            "dp:DP-05"
+          ]
+        },
+        {
+          "class": "clo:EquityDistribution",
+          "dataProducts": [
+            "dp:DP-05"
+          ]
+        },
+        {
+          "class": "clo:FeeExpense",
+          "dataProducts": [
+            "dp:DP-06"
+          ]
+        },
+        {
+          "class": "clo:ManagementFee",
+          "dataProducts": [
+            "dp:DP-06"
+          ]
+        },
+        {
+          "class": "clo:IncentiveFee",
+          "dataProducts": [
+            "dp:DP-06"
+          ]
+        },
+        {
+          "class": "clo:PerformanceSnapshot",
+          "dataProducts": [
+            "dp:DP-03"
+          ]
+        },
+        {
+          "class": "clo:KeyMetricSnapshot",
+          "dataProducts": [
+            "dp:DP-07"
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "clo:queryPatterns",
+      "@type": "owl:NamedIndividual",
+      "label": "Sample Agent Query Patterns",
+      "definition": "Worked examples mapping natural-language questions to ontology traversals and data product lookups.",
+      "patterns": [
+        {
+          "question": "What is the current NAV of the fund?",
+          "traversal": "CLOFund \u2192 hasPerformanceSnapshot \u2192 latest PerformanceSnapshot \u2192 nav",
+          "dataProduct": "dp:DP-03",
+          "metric": "clo:nav"
+        },
+        {
+          "question": "Is the Class A OC test passing?",
+          "traversal": "CLOFund \u2192 hasComplianceTest [OCTest where trancheClass='A'] \u2192 passFail, cushion",
+          "dataProduct": "dp:DP-04",
+          "metric": "clo:passFail, clo:cushion, clo:currentValue vs clo:threshold"
+        },
+        {
+          "question": "What is the fund's current WARF?",
+          "traversal": "CLOFund \u2192 hasKeyMetrics \u2192 latest KeyMetricSnapshot \u2192 warf",
+          "dataProduct": "dp:DP-07",
+          "metric": "clo:warf"
+        },
+        {
+          "question": "Which obligors are in the CCC bucket?",
+          "traversal": "CLOFund \u2192 hasAsset \u2192 LoanAsset where rating \u2264 Caa1 \u2192 hasObligor",
+          "dataProduct": "dp:DP-02 (filtered) + dp:DP-04 (threshold)",
+          "metric": "Obligor name, par value, rating, % of pool"
+        },
+        {
+          "question": "How much did equity receive in the last distribution?",
+          "traversal": "CLOFund \u2192 hasCashflow [EquityDistribution, latest paymentDate] \u2192 amount",
+          "dataProduct": "dp:DP-05",
+          "metric": "clo:EquityDistribution amount (USD)"
+        },
+        {
+          "question": "What happens if the Class B OC test breaches?",
+          "traversal": "OCTest [class='B'] \u2192 breachConsequence + clo:WaterfallPriorityAxiom + clo:OCTestFormulaAxiom",
+          "dataProduct": "Ontology axiom (no data lookup needed)",
+          "metric": "Causal rule: cash diverted to senior principal repayment"
+        },
+        {
+          "question": "What is the fund's net IRR since inception?",
+          "traversal": "CLOFund \u2192 hasPerformanceSnapshot [latest] \u2192 netIRR",
+          "dataProduct": "dp:DP-03",
+          "metric": "clo:netIRR"
+        },
+        {
+          "question": "Are we still in the reinvestment period?",
+          "traversal": "CLOFund \u2192 reinvestmentPeriodEnd vs today + clo:ReinvestmentPeriodAxiom",
+          "dataProduct": "dp:DP-01",
+          "metric": "clo:reinvestmentPeriodEnd vs current date"
+        },
+        {
+          "question": "What is total management fee paid this year?",
+          "traversal": "CLOFund \u2192 hasFee [ManagementFee] \u2192 cumulativeAmountPaid [YTD filter]",
+          "dataProduct": "dp:DP-06",
+          "metric": "YTD management fee paid (USD)"
+        }
+      ]
+    },
+    {
+      "@id": "clo:Fund/DKIG-2024-VII",
+      "@type": "clo:CLOFund",
+      "label": "DKIG Funding 2024-VII LLC",
+      "fundName": "DKIG Funding 2024-VII LLC",
+      "managerName": "DKIG Asset Management LLC",
+      "vintageYear": 2024,
+      "baseCurrency": "USD",
+      "targetPar": 500000000,
+      "reinvestmentPeriodEnd": "2029-03-15",
+      "nonCallPeriodEnd": "2026-03-15",
+      "legalMaturity": "2037-03-15",
+      "asOfDate": "2026-04-30",
+      "instanceData": {
+        "staticProfile": "DP-01 Static Profile",
+        "portfolio": "DP-02 Portfolio Snapshot",
+        "performance": "DP-03 Performance",
+        "compliance": "DP-04 Compliance",
+        "cashflows": "DP-05 Cashflows",
+        "fees": "DP-06 Fees",
+        "keyMetrics": "DP-07 Key Metrics",
+        "liabilityStructure": "DP-08 Liability Structure"
+      }
+    }
+  ]
+}

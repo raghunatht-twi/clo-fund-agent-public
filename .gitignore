@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+~$*
+*.egg-info/
+.env
+# Multi-agent session memory — runtime outputs, not source
+multi_agent/session_memory/**/*.json
+Documents/
+CLO_Fund_Domain_Data.xlsx
