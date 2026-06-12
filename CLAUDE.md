@@ -2,6 +2,17 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Documentation
+
+| File | Description |
+|---|---|
+| `docs/user-guide.html` | Comprehensive user guide — setup, entry points, data products, REST API, multi-agent system, optimizer, configuration, and security controls |
+| `OWASP_AI_Security_Report.html` | Full OWASP LLM Top 10 security assessment and remediation report |
+
+When creating new documentation files, save them to `docs/` and follow the brand guidelines below.
+
+---
+
 ## Brand Guidelines
 
 All output documentation must conform to these brand guidelines:
