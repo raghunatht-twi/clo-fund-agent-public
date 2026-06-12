@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DKIG CLO Fund Agent — User Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:    #FFFFFF;
+      --light-bg: #EDF1F3;
+      --black:    #000000;
+      --teal:     #003D4F;
+      --coral:    #F2617A;
+      --amber:    #CC850A;
+      --sage:     #689E78;
+      --sky:      #47A1AD;
+      --plum:     #634F7D;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--black);
+      background: var(--white);
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--teal);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 0 2rem;
+      height: 56px;
+    }
+    nav .brand {
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      flex-shrink: 0;
+      margin-right: 2rem;
+    }
+    nav a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 0 0.75rem;
+      height: 56px;
+      display: inline-flex;
+      align-items: center;
+      transition: color 0.15s, border-bottom 0.15s;
+      border-bottom: 3px solid transparent;
+    }
+    nav a:hover { color: var(--white); border-bottom-color: var(--coral); }
+
+    /* ── Hero ── */
+    .hero {
+      background: var(--teal);
+      color: var(--white);
+      padding: 4rem 2rem 3.5rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-family: 'Bitter', serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 680px;
+      margin: 0 auto 1.75rem;
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .badge {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 0.25rem 0.9rem;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    section {
+      padding: 3rem 0 2.5rem;
+      border-bottom: 1px solid var(--light-bg);
+    }
+    section:last-child { border-bottom: none; }
+
+    /* ── Section headings ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 0.4rem;
+    }
+    h2 {
+      font-family: 'Bitter', serif;
+      font-size: 1.8rem;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--teal);
+      margin: 1.75rem 0 0.5rem;
+    }
+    h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--black);
+      margin: 1.25rem 0 0.35rem;
+    }
+    p { margin-bottom: 0.85rem; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── Cards grid ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .card {
+      background: var(--light-bg);
+      border-radius: 8px;
+      padding: 1.25rem;
+      border-top: 4px solid var(--teal);
+    }
+    .card.coral  { border-top-color: var(--coral); }
+    .card.amber  { border-top-color: var(--amber); }
+    .card.sage   { border-top-color: var(--sage);  }
+    .card.sky    { border-top-color: var(--sky);   }
+    .card.plum   { border-top-color: var(--plum);  }
+    .card h4 { margin-top: 0; color: var(--teal); font-size: 0.95rem; }
+    .card p  { font-size: 0.88rem; color: #444; margin-bottom: 0; }
+
+    /* ── Code / shell ── */
+    code {
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 0.84em;
+      background: var(--light-bg);
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: #0d1a1f;
+      color: #c8d8dc;
+      border-radius: 8px;
+      padding: 1.1rem 1.4rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    pre .comment { color: #5a8a96; }
+    pre .kw      { color: var(--sky); }
+    pre .str     { color: var(--sage); }
+
+    /* ── Tables ── */
+    .table-wrap { overflow-x: auto; margin: 1rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    thead th {
+      background: var(--teal);
+      color: var(--white);
+      font-weight: 600;
+      text-align: left;
+      padding: 0.6rem 0.9rem;
+    }
+    tbody tr:nth-child(odd)  { background: var(--light-bg); }
+    tbody tr:nth-child(even) { background: var(--white); }
+    tbody td { padding: 0.55rem 0.9rem; vertical-align: top; }
+    tbody td code { background: none; padding: 0; }
+
+    /* ── Call-out boxes ── */
+    .callout {
+      border-left: 4px solid var(--sky);
+      background: #e8f4f6;
+      border-radius: 0 6px 6px 0;
+      padding: 0.85rem 1.1rem;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .callout.warn {
+      border-left-color: var(--amber);
+      background: #fdf3e2;
+    }
+    .callout.danger {
+      border-left-color: var(--coral);
+      background: #fdeaed;
+    }
+    .callout strong { display: block; margin-bottom: 0.2rem; }
+
+    /* ── Pill badges ── */
+    .pill {
+      display: inline-block;
+      border-radius: 12px;
+      padding: 0.15rem 0.65rem;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .pill.pass   { background: #d6eedd; color: #2a6640; }
+    .pill.fail   { background: #fdeaed; color: #b03050; }
+    .pill.note   { background: #e8f4f6; color: #1a6070; }
+    .pill.dp     { background: var(--teal); color: var(--white); }
+
+    /* ── Two-column list ── */
+    .two-col { columns: 2; column-gap: 2rem; margin: 0.75rem 0; }
+    .two-col li { break-inside: avoid; margin-bottom: 0.3rem; font-size: 0.9rem; }
+
+    ul, ol { padding-left: 1.4rem; margin-bottom: 0.85rem; }
+    li { margin-bottom: 0.2rem; }
+
+    /* ── Steps ── */
+    .steps { counter-reset: step-counter; margin: 1rem 0; }
+    .step {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: flex-start;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.15rem;
+    }
+    .step-body { flex: 1; }
+    .step-body p { margin-bottom: 0.4rem; }
+
+    /* ── Example questions ── */
+    .q-list { list-style: none; padding: 0; }
+    .q-list li {
+      background: var(--light-bg);
+      border-radius: 6px;
+      padding: 0.55rem 1rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      position: relative;
+      padding-left: 2rem;
+    }
+    .q-list li::before {
+      content: "?";
+      position: absolute;
+      left: 0.7rem;
+      color: var(--coral);
+      font-weight: 700;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--teal);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 1.5rem 2rem;
+      font-size: 13px;
+    }
+
+    @media (max-width: 640px) {
+      nav a { display: none; }
+      .hero h1 { font-size: 1.9rem; }
+      .two-col { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav>
+  <span class="brand">DKIG CLO Fund Agent</span>
+  <a href="#overview">Overview</a>
+  <a href="#setup">Setup</a>
+  <a href="#entry-points">Entry Points</a>
+  <a href="#funds">Funds</a>
+  <a href="#capabilities">Capabilities</a>
+  <a href="#data-products">Data Products</a>
+  <a href="#api">REST API</a>
+  <a href="#multi-agent">Multi-Agent</a>
+  <a href="#optimizer">Optimizer</a>
+  <a href="#config">Configuration</a>
+  <a href="#security">Security</a>
+</nav>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <h1>DKIG CLO Fund Agent<br>User Guide</h1>
+  <p>A natural-language AI agent for CLO fund analysis — performance, compliance, portfolio analytics, and distribution authorisation across all DKIG-managed funds.</p>
+  <div class="badge-row">
+    <span class="badge">Claude Sonnet 4.6</span>
+    <span class="badge">PostgreSQL + Excel</span>
+    <span class="badge">FastAPI REST</span>
+    <span class="badge">Multi-Agent</span>
+    <span class="badge">Python 3.12+</span>
+  </div>
+</div>
+
+<!-- ── Overview ── -->
+<section id="overview">
+  <div class="container">
+    <div class="section-label">Introduction</div>
+    <h2>What Is the CLO Fund Agent?</h2>
+    <p>The DKIG CLO Fund Agent is an AI-powered analytics system that lets you ask plain-English questions about Collateralised Loan Obligation (CLO) fund data and receive structured, cited answers in seconds. It combines Anthropic's <strong>Claude Sonnet 4.6</strong> model with a structured tool layer that reads from either an Excel workbook or a PostgreSQL database.</p>
+    <p>The system exposes four entry points — a terminal REPL, a one-shot CLI, a REST API, and a browser chat UI — all backed by the same eight canonical data products (DP-01 through DP-08). A separate multi-agent orchestrator handles complex cross-product analysis tasks by dispatching specialist sub-agents in parallel.</p>
+
+    <div class="card-grid">
+      <div class="card coral">
+        <h4>Natural Language Q&amp;A</h4>
+        <p>Ask in plain English. No SQL, no spreadsheets. The agent calls the right tools automatically.</p>
+      </div>
+      <div class="card amber">
+        <h4>Always Cited</h4>
+        <p>Every number is attributed to a fund ID, data product, and reporting date. Hallucination safeguards built in.</p>
+      </div>
+      <div class="card sage">
+        <h4>Compliance-Aware</h4>
+        <p>OC/IC covenant status is checked automatically before equity distribution questions are answered.</p>
+      </div>
+      <div class="card sky">
+        <h4>Portfolio Optimizer</h4>
+        <p>Greedy hill-climbing optimizer finds trade sequences that improve equity yield while keeping all tests passing.</p>
+      </div>
+      <div class="card plum">
+        <h4>Multi-Agent</h4>
+        <p>Complex tasks are decomposed and dispatched to specialist agents — portfolio, compliance, cashflow, fees, and more — running in parallel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Setup ── -->
+<section id="setup">
+  <div class="container">
+    <div class="section-label">Getting Started</div>
+    <h2>Prerequisites &amp; Setup</h2>
+
+    <h3>Requirements</h3>
+    <ul>
+      <li>Python 3.12 or higher</li>
+      <li><code>uv</code> package manager (<a href="https://github.com/astral-sh/uv" style="color:var(--teal)">astral-sh/uv</a>)</li>
+      <li><strong>ANTHROPIC_API_KEY</strong> environment variable set</li>
+      <li>PostgreSQL (required for the DB agent, REST API, and chat server; not needed for the Excel agent)</li>
+    </ul>
+
+    <h3>Installation</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <p><strong>Clone the repository and install dependencies</strong></p>
+          <pre>git clone &lt;repo-url&gt;
+cd clo-fund-agent-public
+uv sync</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <p><strong>Activate the pre-commit lint hook (once per clone)</strong></p>
+          <pre>git config core.hooksPath .githooks</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <p><strong>Set your Anthropic API key</strong></p>
+          <pre><span class="kw">export</span> ANTHROPIC_API_KEY=<span class="str">sk-ant-...</span></pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <p><strong>(DB agent only) Create the PostgreSQL schema and load fund data</strong></p>
+          <pre><span class="comment"># Create tables</span>
+psql -h /tmp -d postgres -f db/schema.sql
+
+<span class="comment"># Load all funds</span>
+uv run python db/load_data.py          <span class="comment"># DKIG-2024-VII, DKIG-2016-I</span>
+uv run python db/load_ce_fund.py       <span class="comment"># DKIG-2018-CE (Clean Energy)</span>
+uv run python db/load_tech_fund.py     <span class="comment"># DKIG-2019-TECH (Technology)</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Tip — Excel agent needs no database</strong>
+      If you only want to query DKIG-2024-VII or DKIG-2016-I and have the <code>CLO_Fund_Domain_Data.xlsx</code> workbook, the Excel agent works with no PostgreSQL setup at all.
+    </div>
+  </div>
+</section>
+
+<!-- ── Entry Points ── -->
+<section id="entry-points">
+  <div class="container">
+    <div class="section-label">Usage</div>
+    <h2>Entry Points</h2>
+    <p>The system provides four ways to interact with fund data. Choose the one that fits your workflow.</p>
+
+    <h3>1 — Excel Agent (no database required)</h3>
+    <p>Reads directly from <code>CLO_Fund_Domain_Data.xlsx</code>. Best for quick exploration of DKIG-2024-VII and DKIG-2016-I without any infrastructure.</p>
+    <pre><span class="comment"># Interactive REPL (recommended for multi-question sessions)</span>
+uv run python -m clo_agent
+
+<span class="comment"># One-shot mode</span>
+uv run python -m clo_agent <span class="str">'What is the net IRR for DKIG-2024-VII?'</span></pre>
+
+    <h3>2 — PostgreSQL Agent</h3>
+    <p>Reads from PostgreSQL. Supports all four funds and discovers new funds automatically. The REPL is significantly faster for interactive use due to prompt caching and connection pool reuse.</p>
+    <pre><span class="comment"># Interactive REPL</span>
+uv run python -m clo_db_agent
+
+<span class="comment"># One-shot mode</span>
+uv run python -m clo_db_agent <span class="str">'What is the net IRR for DKIG-2024-VII?'</span></pre>
+
+    <div class="callout">
+      <strong>REPL vs one-shot</strong>
+      The REPL warms the Anthropic prompt cache after the first question, keeps the PostgreSQL connection pool open, and maintains a 5-minute in-memory data cache. One-shot starts cold every time and is best for scripted automation.
+    </div>
+
+    <h3>3 — REST API</h3>
+    <p>FastAPI application exposing all eight data products as JSON endpoints. Suitable for integration into dashboards or downstream systems.</p>
+    <pre><span class="comment"># Development server</span>
+uv run uvicorn clo_api.main:app --host 127.0.0.1 --port 8000
+
+<span class="comment"># Production (behind TLS-terminating proxy)</span>
+uv run gunicorn clo_api.main:app -w 4 -k uvicorn.workers.UvicornWorker \
+    --bind 127.0.0.1:8000</pre>
+    <p>Swagger UI available at <code>http://127.0.0.1:8000/docs</code> (disabled when <code>ENVIRONMENT=production</code>).</p>
+
+    <h3>4 — Browser Chat UI</h3>
+    <p>Streaming chat interface served over HTTP. Wraps the DB agent with Server-Sent Events for real-time response streaming.</p>
+    <pre><span class="comment"># Default port 7860</span>
+uv run python clo_chat_server.py
+
+<span class="comment"># Custom port</span>
+PORT=8080 uv run python clo_chat_server.py</pre>
+    <p>Open <code>http://localhost:7860</code> in your browser. The agent query endpoint is at <code>/ask</code>.</p>
+
+    <h3>5 — Multi-Agent Orchestrator</h3>
+    <p>For complex, multi-product analysis tasks (e.g. full distribution authorisation reports). Dispatches specialist agents in parallel. See the <a href="#multi-agent" style="color:var(--teal)">Multi-Agent</a> section for details.</p>
+    <pre>uv run python -m multi_agent</pre>
+  </div>
+</section>
+
+<!-- ── Funds ── -->
+<section id="funds">
+  <div class="container">
+    <div class="section-label">Data</div>
+    <h2>Available Funds</h2>
+    <p>Four funds are supported. The DB agent discovers funds dynamically from the database — no code change is needed when loading additional funds.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fund ID</th>
+            <th>Backend</th>
+            <th>Strategy</th>
+            <th>Vintage</th>
+            <th>Status</th>
+            <th>Snapshots</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>DKIG-2024-VII</code></td>
+            <td>Excel + PostgreSQL</td>
+            <td>Broadly syndicated</td>
+            <td>2024</td>
+            <td><span class="pill pass">Reinvesting</span></td>
+            <td>12 monthly</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><code>DKIG-2016-I</code></td>
+            <td>Excel + PostgreSQL</td>
+            <td>Broadly syndicated</td>
+            <td>2016</td>
+            <td><span class="pill note">Amortising</span></td>
+            <td>40 quarterly</td>
+            <td>Active CCC bucket breach (7.8% vs 7.5% threshold)</td>
+          </tr>
+          <tr>
+            <td><code>DKIG-2018-CE</code></td>
+            <td>PostgreSQL only</td>
+            <td>Clean Energy</td>
+            <td>2018</td>
+            <td><span class="pill note">Amortising</span></td>
+            <td>97 monthly</td>
+            <td>$300M AUM</td>
+          </tr>
+          <tr>
+            <td><code>DKIG-2019-TECH</code></td>
+            <td>PostgreSQL only</td>
+            <td>Technology Sector</td>
+            <td>2019</td>
+            <td><span class="pill note">Amortising</span></td>
+            <td>29 quarterly</td>
+            <td>$400M AUM</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <strong>DKIG-2016-I — Active Covenant Breach</strong>
+      The CCC bucket is at 7.8% against a 7.5% threshold. Equity distributions are currently diverted to pay down senior notes. The agent will flag this automatically when answering distribution questions.
+    </div>
+  </div>
+</section>
+
+<!-- ── Capabilities ── -->
+<section id="capabilities">
+  <div class="container">
+    <div class="section-label">What You Can Ask</div>
+    <h2>Capabilities &amp; Example Questions</h2>
+    <p>The agent maps your question to the right data product and tool automatically. Below are representative questions organised by topic.</p>
+
+    <h3>Fund Overview &amp; Static Profile</h3>
+    <ul class="q-list">
+      <li>What is the target par amount and legal final maturity of DKIG-2024-VII?</li>
+      <li>What is the management fee rate for DKIG-2019-TECH?</li>
+      <li>When does the reinvestment period end for DKIG-2024-VII?</li>
+    </ul>
+
+    <h3>Performance</h3>
+    <ul class="q-list">
+      <li>What is the net IRR for DKIG-2024-VII?</li>
+      <li>Show me the TVPI and DPI for all funds.</li>
+      <li>How has equity NAV changed between Q1 2023 and Q4 2023 for DKIG-2016-I?</li>
+      <li>What is the current period P&amp;L for DKIG-2018-CE?</li>
+      <li>Compare gross IRR across all four funds.</li>
+    </ul>
+
+    <h3>Compliance &amp; Covenant Tests</h3>
+    <ul class="q-list">
+      <li>Are there any compliance breaches in DKIG-2016-I?</li>
+      <li>What is the OC cushion on the Class A notes for DKIG-2024-VII?</li>
+      <li>Show me all failing covenant tests across the portfolio.</li>
+      <li>What happens if the IC test is breached?</li>
+    </ul>
+
+    <h3>Portfolio &amp; Loan-Level Analysis</h3>
+    <ul class="q-list">
+      <li>Which loans in DKIG-2024-VII have a Moody's rating of Caa1 or below?</li>
+      <li>What are the top 5 positions by par amount in DKIG-2019-TECH?</li>
+      <li>What is the WARF and WAS for DKIG-2018-CE as of the latest snapshot?</li>
+      <li>Which loans contribute most to spread income in DKIG-2024-VII?</li>
+      <li>What happens to WARF and WAL if I replace position P0023 with a B1-rated loan at 350 bps?</li>
+    </ul>
+
+    <h3>Cashflows &amp; Distribution</h3>
+    <ul class="q-list">
+      <li>How much did equity receive in the last distribution for DKIG-2024-VII?</li>
+      <li>Show me the full waterfall for the most recent payment date.</li>
+      <li>Is equity currently receiving distributions from DKIG-2016-I?</li>
+    </ul>
+
+    <h3>Fees</h3>
+    <ul class="q-list">
+      <li>What management fees were paid in the current period for DKIG-2024-VII?</li>
+      <li>What is the total expense ratio for DKIG-2018-CE?</li>
+      <li>Has the incentive fee hurdle been met for DKIG-2019-TECH?</li>
+    </ul>
+
+    <h3>Liability Structure</h3>
+    <ul class="q-list">
+      <li>What is the current notional outstanding on the Class A-1 notes for DKIG-2024-VII?</li>
+      <li>Show me the full tranche stack with ratings and subordination levels.</li>
+      <li>What is the waterfall priority order for DKIG-2016-I?</li>
+    </ul>
+
+    <h3>Portfolio Optimisation</h3>
+    <ul class="q-list">
+      <li>Optimise the portfolio for DKIG-2024-VII to maximise equity yield.</li>
+      <li>Is there any trade sequence that improves equity yield while keeping all tests passing?</li>
+      <li>How much can equity yield improve for DKIG-2016-I given the current breach?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── Data Products ── -->
+<section id="data-products">
+  <div class="container">
+    <div class="section-label">Reference</div>
+    <h2>Data Products</h2>
+    <p>All fund data is organised into eight canonical data products. Each maps to an Excel worksheet and a PostgreSQL table (<code>dp01_*</code> … <code>dp08_*</code>). Every agent answer cites the relevant data product.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Data Product</th>
+            <th>Key Fields</th>
+            <th>Agent Tools</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pill dp">DP-01</span></td>
+            <td>Fund Static Profile</td>
+            <td>Fund name, manager, vintage year, closing date, reinvestment period end, non-call period end, legal final maturity, target par, currency, fee rates, hurdle</td>
+            <td><code>get_fund_static_profile</code></td>
+          </tr>
+          <tr>
+            <td><span class="pill dp">DP-02</span></td>
+            <td>Portfolio Snapshot</td>
+            <td>Position ID, obligor name, industry, country, loan type, par amount, market value, price, SOFR spread, maturity date, ratings, PIK/LBO/covenant-lite flags, days past due</td>
+            <td><code>get_portfolio_loans</code>, <code>simulate_loan_replacement</code>, <code>get_asset_return_contribution</code></td>
+          </tr>
+          <tr>
+            <td><span class="pill dp">DP-03</span></td>
+            <td>Performance</td>
+            <td>Total fund NAV, equity NAV, gross/net IRR, DPI, RVPI, TVPI, ITD P&amp;L, current period P&amp;L, realised/unrealised G&amp;L, interest income, benchmark return, excess return</td>
+            <td><code>get_latest_performance</code>, <code>get_performance_history</code>, <code>compute_period_return</code></td>
+          </tr>
+          <tr>
+            <td><span class="pill dp">DP-04</span></td>
+            <td>Compliance Dashboard</td>
+            <td>Test ID, test name, type (OC/IC/Quality/Concentration), tranche class, current value, threshold, cushion, PASS/FAIL, breach consequence, last tested date</td>
+            <td><code>get_compliance_status</code></td>
+          </tr>
+          <tr>
+            <td><span class="pill dp">DP-05</span></td>
+            <td>Cashflows</td>
+            <td>Payment date, collection period, interest/principal proceeds, waterfall step, recipient, amount disbursed, OC diversion amount, equity distribution, fees paid</td>
+            <td><code>get_cashflow_history</code>, <code>get_latest_equity_distribution</code></td>
+          </tr>
+          <tr>
+            <td><span class="pill dp">DP-06</span></td>
+            <td>Fees</td>
+            <td>Period, fee type (Management/Incentive/Trustee/Admin/Legal/Rating Agency/Tax/TER), rate, accrued YTD, paid in period, cumulative paid, hurdle rate, effective tax rate</td>
+            <td><code>get_fee_summary</code></td>
+          </tr>
+          <tr>
+            <td><span class="pill dp">DP-07</span></td>
+            <td>Key Metrics Tracker</td>
+            <td>WAS (bps over SOFR), WARF, WAL, WAC, weighted avg recovery rate, par build/loss vs target, % floating, % PIK, % CCC/Caa, % covenant-lite, diversity score, obligor &amp; industry counts, top-10 concentration</td>
+            <td><code>get_latest_key_metrics</code>, <code>get_key_metrics_history</code></td>
+          </tr>
+          <tr>
+            <td><span class="pill dp">DP-08</span></td>
+            <td>Liability Structure</td>
+            <td>Class designation, CUSIP, initial/current notional, coupon type &amp; rate, payment frequency, ratings, subordination level, OC/IC cushion, waterfall priority, principal repaid, interest paid, accrued interest, rating outlook</td>
+            <td><code>get_liability_structure</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── REST API ── -->
+<section id="api">
+  <div class="container">
+    <div class="section-label">Integration</div>
+    <h2>REST API Reference</h2>
+    <p>The FastAPI application exposes all eight data products as read-only JSON endpoints. Authentication uses the <code>X-API-Key</code> request header when <code>CLO_API_KEY</code> is configured.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Endpoint</th>
+            <th>Method</th>
+            <th>Data Product</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>GET /funds</code></td>
+            <td>GET</td>
+            <td>—</td>
+            <td>List all available fund IDs</td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}</code></td>
+            <td>GET</td>
+            <td>DP-01</td>
+            <td>Fund static profile</td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}/portfolio</code></td>
+            <td>GET</td>
+            <td>DP-02</td>
+            <td>All current loan positions</td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}/performance/latest</code></td>
+            <td>GET</td>
+            <td>DP-03</td>
+            <td>Most recent performance snapshot</td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}/performance</code></td>
+            <td>GET</td>
+            <td>DP-03</td>
+            <td>History; optional <code>start_date</code> &amp; <code>end_date</code> (YYYY-MM-DD)</td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}/compliance</code></td>
+            <td>GET</td>
+            <td>DP-04</td>
+            <td>All covenant test statuses</td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}/cashflows</code></td>
+            <td>GET</td>
+            <td>DP-05</td>
+            <td>Full waterfall history</td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}/cashflows/equity-distribution/latest</code></td>
+            <td>GET</td>
+            <td>DP-05</td>
+            <td>Most recent equity distribution row</td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}/fees</code></td>
+            <td>GET</td>
+            <td>DP-06</td>
+            <td>Fee &amp; expense ledger</td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}/metrics/latest</code></td>
+            <td>GET</td>
+            <td>DP-07</td>
+            <td>Latest portfolio quality snapshot</td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}/metrics</code></td>
+            <td>GET</td>
+            <td>DP-07</td>
+            <td>History; optional <code>start_date</code> &amp; <code>end_date</code></td>
+          </tr>
+          <tr>
+            <td><code>GET /funds/{fund_id}/liability</code></td>
+            <td>GET</td>
+            <td>DP-08</td>
+            <td>Full tranche stack</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Authentication</h3>
+    <pre><span class="comment"># Set the API key environment variable before starting the server</span>
+<span class="kw">export</span> CLO_API_KEY=<span class="str">your-secret-key</span>
+
+<span class="comment"># Include the header in every request</span>
+curl -H <span class="str">"X-API-Key: your-secret-key"</span> \
+     http://127.0.0.1:8000/funds/DKIG-2024-VII/performance/latest</pre>
+
+    <div class="callout warn">
+      <strong>Production deployment</strong>
+      Set <code>ENVIRONMENT=production</code> to disable Swagger UI and ReDoc. <code>CLO_API_KEY</code> is mandatory in production — the server will exit at startup if it is unset. Always run behind a TLS-terminating reverse proxy.
+    </div>
+
+    <h3>Rate Limiting</h3>
+    <p>The API enforces a limit of <strong>60 requests per minute per IP address</strong>. Requests exceeding this limit receive an HTTP 429 response.</p>
+  </div>
+</section>
+
+<!-- ── Multi-Agent ── -->
+<section id="multi-agent">
+  <div class="container">
+    <div class="section-label">Advanced</div>
+    <h2>Multi-Agent System</h2>
+    <p>The <code>multi_agent/</code> package provides an orchestrator-plus-specialist architecture for complex, multi-product analysis tasks such as full distribution authorisation reports. It is distinct from the single-agent <code>clo_db_agent</code> — use it when you need synthesis across multiple data products in a single response.</p>
+
+    <h3>Specialist Agents</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Portfolio Agent</h4>
+        <p>Reads DP-02 (loan positions) and DP-07 (WARF, WAS, WAL, diversity score).</p>
+      </div>
+      <div class="card coral">
+        <h4>Performance Agent</h4>
+        <p>Reads DP-03 (NAV, IRR, DPI, RVPI, TVPI, period P&amp;L).</p>
+      </div>
+      <div class="card amber">
+        <h4>Compliance Agent</h4>
+        <p>Reads DP-04. Must run before the cashflow agent per the Waterfall Priority Axiom.</p>
+      </div>
+      <div class="card sage">
+        <h4>Cashflow Agent</h4>
+        <p>Reads DP-05. Uses compliance gate output to model distribution vs. diversion.</p>
+      </div>
+      <div class="card sky">
+        <h4>Fee Agent</h4>
+        <p>Reads DP-06 (management, incentive, trustee, admin, tax fees).</p>
+      </div>
+      <div class="card plum">
+        <h4>Optimizer Agent</h4>
+        <p>Runs the portfolio return optimizer. Only dispatched when OC cushion is thin (&lt; 100 bps) or explicitly requested.</p>
+      </div>
+      <div class="card">
+        <h4>Reporting Agent</h4>
+        <p>Reads all session memory and synthesises the final structured memo.</p>
+      </div>
+    </div>
+
+    <h3>Distribution Authorisation Workflow</h3>
+    <p>The orchestrator follows a defined workflow for distribution tasks:</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><p>Call <code>list_available_funds</code> if no fund is specified.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><p><strong>Parallel:</strong> dispatch portfolio, performance, compliance, and fee agents simultaneously.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><p><strong>Sequential:</strong> dispatch cashflow agent — uses the compliance gate result to determine distribution vs. diversion path.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body"><p><strong>Conditional:</strong> dispatch optimizer agent only if OC cushion &lt; 100 bps or a breach exists.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body"><p>Dispatch reporting agent to synthesise all session memory into the final memo.</p></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Session memory</strong>
+      All specialist agents write their outputs to <code>multi_agent/session_memory/</code>. The reporting agent reads from this shared store to compile the final memo. A consistent <code>session_date</code> is used across all agent calls in one orchestration run.
+    </div>
+  </div>
+</section>
+
+<!-- ── Optimizer ── -->
+<section id="optimizer">
+  <div class="container">
+    <div class="section-label">Analytics</div>
+    <h2>Portfolio Optimizer</h2>
+    <p>The <code>portfolio_optimizer/</code> module implements a greedy hill-climbing optimizer that maximises equity spread yield subject to all covenant constraints. It is exposed as the <code>optimize_portfolio_returns</code> tool in the DB agent.</p>
+
+    <h3>How It Works</h3>
+    <ol>
+      <li>Loads the current portfolio from DP-02 and covenant thresholds from DP-04.</li>
+      <li>Pre-filters candidate trades: only sell a lower-spread position into a higher-spread one.</li>
+      <li>Evaluates all pairwise sell/buy combinations at sell fractions of 25%, 50%, or 100%.</li>
+      <li>Accepts a trade only if it <strong>simultaneously</strong> improves equity yield AND all compliance tests still pass.</li>
+      <li>Applies the best qualifying trade, then repeats — up to 150 iterations.</li>
+      <li>Returns the full accepted-trade sequence, per-iteration compliance detail, and the final portfolio state.</li>
+    </ol>
+
+    <h3>Output Structure</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>baseline_equity_yield_pct</code></td><td>Equity spread yield before any optimisation</td></tr>
+          <tr><td><code>final_equity_yield_pct</code></td><td>Equity spread yield after all accepted trades</td></tr>
+          <tr><td><code>total_yield_improvement_pp</code></td><td>Absolute improvement in percentage points</td></tr>
+          <tr><td><code>accepted_trades</code></td><td>Ordered list of every accepted sell/buy pair with compliance detail</td></tr>
+          <tr><td><code>final_portfolio</code></td><td>Full loan-level portfolio after all trades are applied</td></tr>
+          <tr><td><code>converged</code></td><td>True if the optimizer found no further improving trade; false if the 150-iteration cap was hit</td></tr>
+          <tr><td><code>recommendation_reason</code></td><td>Plain-English summary of why the recommended trade sequence was chosen</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <strong>Caveat — equity yield is a proxy metric</strong>
+      The optimizer uses a spread-over-SOFR proxy for equity yield. The absolute percentage is <em>not</em> the fund net IRR. Yield <em>deltas</em> between scenarios are accurate and directly comparable. Always verify final figures against DP-03 (Net IRR) and DP-04 (Compliance Dashboard) before acting on recommendations.
+    </div>
+
+    <h3>Loan Replacement Simulation</h3>
+    <p>For one-off what-if analysis, use <code>simulate_loan_replacement</code> directly:</p>
+    <ul class="q-list">
+      <li>What happens to WARF, WAS, and WAL if I replace position P0023 with a B1-rated loan at 350 bps maturing 2030-06-15?</li>
+    </ul>
+    <p>The tool removes the specified position, adds a synthetic loan with your parameters, and returns before/after values plus deltas for all three metrics.</p>
+  </div>
+</section>
+
+<!-- ── Configuration ── -->
+<section id="config">
+  <div class="container">
+    <div class="section-label">Configuration</div>
+    <h2>Environment Variables</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Default</th>
+            <th>Component</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>ANTHROPIC_API_KEY</code></td>
+            <td><em>Required</em></td>
+            <td>Both agents</td>
+            <td>Anthropic API authentication</td>
+          </tr>
+          <tr>
+            <td><code>DATABASE_URL</code></td>
+            <td><code>host=/tmp port=5432 dbname=postgres</code></td>
+            <td>DB agent, API</td>
+            <td>PostgreSQL connection DSN</td>
+          </tr>
+          <tr>
+            <td><code>CLO_SESSION_TOKEN_LIMIT</code></td>
+            <td><code>200000</code></td>
+            <td>Both agents</td>
+            <td>Max cumulative tokens per REPL session. A warning is printed at 80%.</td>
+          </tr>
+          <tr>
+            <td><code>CLO_REQUEST_TIMEOUT_SEC</code></td>
+            <td><code>120</code></td>
+            <td>Both agents</td>
+            <td>Per-question wall-clock timeout in seconds</td>
+          </tr>
+          <tr>
+            <td><code>CLO_MAX_TOOL_ITERATIONS</code></td>
+            <td><code>10</code></td>
+            <td>Both agents</td>
+            <td>Max tool-call cycles per question</td>
+          </tr>
+          <tr>
+            <td><code>CLO_MAX_HISTORY_ROWS</code></td>
+            <td><code>200</code></td>
+            <td>Both agents</td>
+            <td>Max rows returned by history tools. A truncation note is appended when the cap is hit.</td>
+          </tr>
+          <tr>
+            <td><code>CLO_ONTOLOGY_SHA256</code></td>
+            <td><em>Unset</em></td>
+            <td>Both agents</td>
+            <td>Expected SHA-256 of <code>clo-fund-ontology.jsonld</code>. If set, the agent refuses to start if the file hash does not match.</td>
+          </tr>
+          <tr>
+            <td><code>CLO_WORKBOOK_SHA256</code></td>
+            <td><em>Unset</em></td>
+            <td>Excel agent</td>
+            <td>Expected SHA-256 of <code>CLO_Fund_Domain_Data.xlsx</code></td>
+          </tr>
+          <tr>
+            <td><code>CLO_API_KEY</code></td>
+            <td><em>Unset</em></td>
+            <td>REST API</td>
+            <td>API key callers must supply in <code>X-API-Key</code> header. Auth is disabled if unset (development only).</td>
+          </tr>
+          <tr>
+            <td><code>CORS_ORIGINS</code></td>
+            <td><code>http://localhost:3000, http://localhost:8000</code></td>
+            <td>REST API</td>
+            <td>Comma-separated list of allowed CORS origins</td>
+          </tr>
+          <tr>
+            <td><code>ENVIRONMENT</code></td>
+            <td><em>Unset</em></td>
+            <td>REST API</td>
+            <td>Set to <code>production</code> to disable <code>/docs</code> and <code>/redoc</code></td>
+          </tr>
+          <tr>
+            <td><code>PORT</code></td>
+            <td><code>7860</code></td>
+            <td>Chat server</td>
+            <td>HTTP port for the browser chat interface</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Linting</h3>
+    <pre><span class="comment"># Check</span>
+uv run ruff check .
+
+<span class="comment"># Auto-fix safe issues</span>
+uv run ruff check . --fix</pre>
+    <p>Rules E, F, W are enforced. Line length is 100. Commits are blocked if ruff errors are present (pre-commit hook in <code>.githooks/pre-commit</code>).</p>
+  </div>
+</section>
+
+<!-- ── Security ── -->
+<section id="security">
+  <div class="container">
+    <div class="section-label">Security</div>
+    <h2>Security Controls</h2>
+    <p>The agent implements controls mapped to the OWASP LLM Top 10. Source comments reference the relevant finding ID for auditing.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tag</th>
+            <th>Control</th>
+            <th>Implementation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>AI-01</code></td>
+            <td>Input sanitisation</td>
+            <td>500-character cap, NFKC normalisation, 17-pattern injection blocklist in <code>_sanitise_input()</code></td>
+          </tr>
+          <tr>
+            <td><code>AI-02 / AI-08</code></td>
+            <td>Tool result sanitisation</td>
+            <td>Strips injection markers (<code>[SYSTEM]</code>, <code>[INST]</code>, etc.) and markdown heading syntax before model re-ingestion in <code>_to_json()</code></td>
+          </tr>
+          <tr>
+            <td><code>AI-04 / AI-07 / AI-12 / AI-13</code></td>
+            <td>Output safety</td>
+            <td>System prompt leakage detection; citation warning when financial figures lack fund/DP/date attribution in <code>_check_output()</code></td>
+          </tr>
+          <tr>
+            <td><code>AI-06</code></td>
+            <td>Ontology integrity</td>
+            <td>SHA-256 verification of <code>clo-fund-ontology.jsonld</code> at startup via <code>CLO_ONTOLOGY_SHA256</code></td>
+          </tr>
+          <tr>
+            <td><code>AI-09</code></td>
+            <td>Row cap</td>
+            <td>History tool results capped at <code>CLO_MAX_HISTORY_ROWS</code> (default 200) with truncation sentinel</td>
+          </tr>
+          <tr>
+            <td><code>AI-10</code></td>
+            <td>Tool iteration cap</td>
+            <td>Max <code>CLO_MAX_TOOL_ITERATIONS</code> (default 10) tool-call cycles per question</td>
+          </tr>
+          <tr>
+            <td><code>AI-11</code></td>
+            <td>Fund registry protection</td>
+            <td>Fund IDs are never embedded in the system prompt; agent calls <code>list_available_funds()</code> at session start</td>
+          </tr>
+          <tr>
+            <td><code>AI-15</code></td>
+            <td>Session token budget</td>
+            <td>REPL enforces <code>CLO_SESSION_TOKEN_LIMIT</code> (default 200,000) with 80% warning</td>
+          </tr>
+          <tr>
+            <td><code>AI-17</code></td>
+            <td>Request timeout</td>
+            <td>Tool runner runs in a daemon thread; raises <code>TimeoutError</code> after <code>CLO_REQUEST_TIMEOUT_SEC</code> (default 120s)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>API Security Controls</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Control</th><th>Detail</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>API key authentication</td><td><code>X-API-Key</code> header required on all endpoints when <code>CLO_API_KEY</code> is set (F-01, F-11)</td></tr>
+          <tr><td>CORS allowlist</td><td>No wildcard origins; explicit list via <code>CORS_ORIGINS</code> (F-02)</td></tr>
+          <tr><td>Rate limiting</td><td>60 requests per minute per IP address (F-08)</td></tr>
+          <tr><td>Request logging</td><td>Method, path, status, duration, and client IP logged for every request (F-09)</td></tr>
+          <tr><td>Error handler</td><td>Generic 500 response — no stack traces leaked to clients (F-18)</td></tr>
+          <tr><td>Swagger/ReDoc</td><td>Disabled when <code>ENVIRONMENT=production</code> (F-07)</td></tr>
+          <tr><td>Date validation</td><td>FastAPI validates <code>start_date</code>/<code>end_date</code> as proper <code>date</code> types; returns HTTP 422 on malformed input (F-12)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout danger">
+      <strong>Never commit your API keys</strong>
+      <code>ANTHROPIC_API_KEY</code> and <code>CLO_API_KEY</code> must be set as environment variables, not hardcoded in source files or committed to version control.
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <p>DKIG CLO Fund Agent &mdash; User Guide &mdash; Version 1.0 &mdash; June 2026</p>
+  <p style="margin-top:0.3rem;">Built by Thoughtworks &middot; DKIG Asset Management LLC</p>
+</footer>
+
+</body>
+</html>

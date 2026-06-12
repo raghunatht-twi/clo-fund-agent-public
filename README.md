@@ -2,6 +2,13 @@
 
 An AI agent platform that answers questions about CLO fund performance in plain English. Four funds are currently loaded. A browser-based chat interface is the primary way to interact — it supports both a single-agent mode and a multi-agent orchestration mode. A command-line interface and a REST API are also available.
 
+## Documentation
+
+| Document | Description |
+|---|---|
+| [`docs/user-guide.html`](docs/user-guide.html) | Comprehensive user guide — setup, all entry points, example questions, data product reference, REST API, multi-agent system, portfolio optimizer, configuration, and security controls |
+| [`OWASP_AI_Security_Report.html`](OWASP_AI_Security_Report.html) | Full OWASP LLM Top 10 security assessment and remediation report |
+
 | Fund | Vintage | Status |
 |---|---|---|
 | DKIG Funding 2024-VII LLC | 2024 | Reinvesting, 12 monthly snapshots |
@@ -270,7 +277,7 @@ Rules: `E`, `F`, `W`. Line length: 100. `E501` is suppressed in `db/` and `gener
 
 ## Security
 
-All OWASP LLM Top 10 (2025) AI-security findings have been remediated — see `Documents/OWASP_Report.md` and `OWASP_AI_Security_Report.html`. All agents (single and multi) share the same controls via `_shared.py` in the multi-agent package and the existing `agent.py` security layer:
+All OWASP LLM Top 10 (2025) AI-security findings have been remediated — see [`OWASP_AI_Security_Report.html`](OWASP_AI_Security_Report.html). All agents (single and multi) share the same controls via `_shared.py` in the multi-agent package and the existing `agent.py` security layer:
 
 - **Prompt injection guard** — 500-char input cap, NFKC Unicode normalisation, 17-pattern blocklist
 - **Tool result sanitisation** — injection markers and markdown syntax stripped before model re-ingestion
