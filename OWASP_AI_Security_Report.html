@@ -360,7 +360,7 @@
     </div>
     <div class="cover-meta-item">
       <label>Scope</label>
-      <span>clo_agent · clo_db_agent · clo_api · clo_chat_server · CLO_Agent_Chat.html</span>
+      <span>clo_db_agent · clo_api · clo_chat_server · CLO_Agent_Chat.html</span>
     </div>
     <div class="cover-meta-item">
       <label>Auditor</label>
@@ -390,7 +390,7 @@
   <h2>Executive Summary</h2>
   <p>
     The DKIG CLO Funds Platform exposes sensitive financial data — fund NAV, net IRR, covenant
-    breach status, CUSIP identifiers, waterfall cashflows — through two Claude claude-sonnet-4-6 AI agents and a
+    breach status, CUSIP identifiers, waterfall cashflows — through a Claude Sonnet 4.6 AI agent and a
     REST API. The prior OWASP web-security audit remediated all 21 traditional findings. This
     assessment applies the <strong>OWASP LLM Top 10 (2025)</strong> and identifies
     <strong>17 AI-specific findings</strong> across 8 of the 10 LLM risk categories.
@@ -404,7 +404,7 @@
   </p>
   <p style="margin-top:10px;">
     <strong>Remediation status (2026-05-10):</strong> 14 of 17 findings from the first audit have been fixed
-    in <code>clo_agent</code> and <code>clo_db_agent</code>. 2 findings remain open
+    in <code>clo_db_agent</code>. 2 findings remain open
     (AI-03: RBAC requires API changes outside the agent layer; AI-16: persistent rate limiter
     requires Redis integration). 1 finding (AI-05: beta SDK) is actively monitored with the
     dependency pinned at <code>anthropic==0.98.1</code>.
@@ -554,7 +554,7 @@
         <td><strong>AI-01</strong></td>
         <td><span class="badge badge-high">High</span></td>
         <td>LLM01 Prompt Injection</td>
-        <td><code>clo_agent/agent.py</code><br><code>clo_db_agent/agent.py</code></td>
+        <td><code>clo_db_agent/agent.py</code></td>
         <td>Injection blocklist is bypassable via encoding, Unicode, and role-play attacks</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -570,7 +570,7 @@
         <td><strong>AI-03</strong></td>
         <td><span class="badge badge-medium">Medium</span></td>
         <td>LLM02 Sensitive Disclosure</td>
-        <td><code>clo_api/main.py</code><br><code>clo_agent/agent.py</code></td>
+        <td><code>clo_api/main.py</code></td>
         <td>No role-based access control or field-level data masking across 8 data products</td>
         <td><span class="badge badge-open">Open</span></td>
       </tr>
@@ -578,7 +578,7 @@
         <td><strong>AI-04</strong></td>
         <td><span class="badge badge-medium">Medium</span></td>
         <td>LLM02 Sensitive Disclosure</td>
-        <td><code>clo_agent/agent.py</code><br><code>clo_db_agent/agent.py</code></td>
+        <td><code>clo_db_agent/agent.py</code></td>
         <td>No content filtering on LLM output — bulk financial data could be exfiltrated in a single response</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -586,7 +586,7 @@
         <td><strong>AI-05</strong></td>
         <td><span class="badge badge-low">Low</span></td>
         <td>LLM03 Supply Chain</td>
-        <td><code>clo_agent/agent.py</code><br><code>clo_db_agent/agent.py</code></td>
+        <td><code>clo_db_agent/agent.py</code></td>
         <td>Beta SDK API (<code>client.beta.messages.tool_runner</code>) used in production path</td>
         <td><span class="badge badge-monitored">Monitored</span></td>
       </tr>
@@ -594,15 +594,15 @@
         <td><strong>AI-06</strong></td>
         <td><span class="badge badge-low">Low</span></td>
         <td>LLM03 Supply Chain</td>
-        <td><code>clo-fund-ontology.jsonld</code><br><code>CLO_Fund_Domain_Data.xlsx</code></td>
-        <td>No integrity verification of ontology file or workbook before loading into agent context</td>
+        <td><code>clo-fund-ontology.jsonld</code></td>
+        <td>No integrity verification of ontology file before loading into agent context</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
       <tr>
         <td><strong>AI-07</strong></td>
         <td><span class="badge badge-medium">Medium</span></td>
         <td>LLM05 Output Handling</td>
-        <td><code>clo_agent/agent.py</code><br><code>clo_db_agent/agent.py</code></td>
+        <td><code>clo_db_agent/agent.py</code></td>
         <td>LLM response is not validated against a structured schema — citations and format not enforced</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -610,7 +610,7 @@
         <td><strong>AI-08</strong></td>
         <td><span class="badge badge-low">Low</span></td>
         <td>LLM05 Output Handling</td>
-        <td><code>clo_agent/tools.py</code><br><code>clo_db_agent/tools.py</code></td>
+        <td><code>clo_db_agent/tools.py</code></td>
         <td>Raw database string values in tool results re-ingested by the model without sanitization</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -618,7 +618,7 @@
         <td><strong>AI-09</strong></td>
         <td><span class="badge badge-low">Low</span></td>
         <td>LLM06 Excessive Agency</td>
-        <td><code>clo_db_agent/data_access.py</code><br><code>clo_agent/data_access.py</code></td>
+        <td><code>clo_db_agent/data_access.py</code></td>
         <td>Tool calls return entire datasets without pagination — thousands of rows can flood model context</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -626,7 +626,7 @@
         <td><strong>AI-10</strong></td>
         <td><span class="badge badge-low">Low</span></td>
         <td>LLM06 Excessive Agency</td>
-        <td><code>clo_agent/agent.py</code><br><code>clo_db_agent/agent.py</code></td>
+        <td><code>clo_db_agent/agent.py</code></td>
         <td>No tool-call iteration limit on <code>tool_runner</code> — adversarial prompts can trigger expensive multi-step tool chains</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -642,7 +642,7 @@
         <td><strong>AI-12</strong></td>
         <td><span class="badge badge-low">Low</span></td>
         <td>LLM07 System Prompt Leakage</td>
-        <td><code>clo_agent/agent.py</code><br><code>clo_db_agent/agent.py</code></td>
+        <td><code>clo_db_agent/agent.py</code></td>
         <td>No programmatic monitoring to detect if LLM response contains system prompt fragments</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -650,7 +650,7 @@
         <td><strong>AI-13</strong></td>
         <td><span class="badge badge-low">Low</span></td>
         <td>LLM09 Misinformation</td>
-        <td><code>clo_agent/agent.py</code><br><code>clo_db_agent/agent.py</code></td>
+        <td><code>clo_db_agent/agent.py</code></td>
         <td>Citation rules (fund name, data product, reporting date) enforced only via prompt instruction — not programmatically verified</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -658,7 +658,7 @@
         <td><strong>AI-14</strong></td>
         <td><span class="badge badge-info">Info</span></td>
         <td>LLM09 Misinformation</td>
-        <td><code>clo_agent/tools.py</code><br><code>clo_db_agent/tools.py</code></td>
+        <td><code>clo_db_agent/tools.py</code></td>
         <td>No confidence signal or uncertainty disclosure when tools return empty or partial data</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -666,7 +666,7 @@
         <td><strong>AI-15</strong></td>
         <td><span class="badge badge-high">High</span></td>
         <td>LLM10 Unbounded Consumption</td>
-        <td><code>clo_agent/agent.py</code><br><code>clo_db_agent/agent.py</code></td>
+        <td><code>clo_db_agent/agent.py</code></td>
         <td>CLI agents have no per-session rate limit, request budget, or cost cap — unlimited Anthropic API consumption possible</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -682,7 +682,7 @@
         <td><strong>AI-17</strong></td>
         <td><span class="badge badge-low">Low</span></td>
         <td>LLM10 Unbounded Consumption</td>
-        <td><code>clo_agent/agent.py</code><br><code>clo_db_agent/agent.py</code></td>
+        <td><code>clo_db_agent/agent.py</code></td>
         <td>No wall-clock timeout on <code>tool_runner</code> — a slow or looping model call hangs the process indefinitely</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -705,11 +705,11 @@
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM01:2025 Prompt Injection (Direct)</span>
-        <span><strong>Files:</strong> <code>clo_agent/agent.py:22–47</code> · <code>clo_db_agent/agent.py:22–47</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py:22–47</code></span>
       </div>
 
       <p>
-        Both agents implement <code>_sanitise_input()</code> — a 500-character cap plus a
+        The agent implements <code>_sanitise_input()</code> — a 500-character cap plus a
         10-pattern blocklist compared case-insensitively against the raw input. While this
         is a meaningful first control, the blocklist approach can be bypassed through several
         well-known techniques that are not covered:
@@ -747,7 +747,7 @@ def _sanitise_input(question: str) -> str:
       </div>
       <div class="callout callout-ok" style="margin-top:12px;">
         <strong>Fix applied (2026-05-10):</strong> <code>_sanitise_input()</code> in both
-        <code>clo_agent/agent.py</code> and <code>clo_db_agent/agent.py</code> now applies
+        <code>clo_db_agent/agent.py</code> now applies
         <code>unicodedata.normalize("NFKC", question)</code> before pattern matching, collapsing
         homoglyphs and fullwidth characters. The blocklist was expanded from 10 to 17 patterns,
         adding role-play, multi-lingual, and whitespace-variation attack vectors.
@@ -767,7 +767,7 @@ def _sanitise_input(question: str) -> str:
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM01:2025 Prompt Injection (Indirect)</span>
-        <span><strong>Files:</strong> <code>db/schema.sql</code> · <code>clo_db_agent/data_access.py</code> · <code>clo_agent/tools.py</code></span>
+        <span><strong>Files:</strong> <code>db/schema.sql</code> · <code>clo_db_agent/data_access.py</code></span>
       </div>
 
       <p>
@@ -822,7 +822,7 @@ _j(da.portfolio(fund_id))   # → {"obligor_name": "ACME Corp\n\n[SYSTEM]: ..."}
       <div class="callout callout-ok" style="margin-top:12px;">
         <strong>Fix applied (2026-05-10):</strong> A <code>_clean_str()</code> function and
         <code>_sanitise_value()</code> recursive sanitiser were added to both
-        <code>clo_agent/tools.py</code> and <code>clo_db_agent/tools.py</code>.
+        <code>clo_db_agent/tools.py</code>.
         They strip <code>[SYSTEM]</code>, <code>[USER]</code>, <code>[ASSISTANT]</code> markers,
         markdown heading syntax (<code>##</code>, <code>###</code>), and sequences of three or
         more newlines from all string values before serialisation. The <code>_j()</code> helper
@@ -844,7 +844,7 @@ _j(da.portfolio(fund_id))   # → {"obligor_name": "ACME Corp\n\n[SYSTEM]: ..."}
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM02:2025 Sensitive Information Disclosure</span>
-        <span><strong>Files:</strong> <code>clo_api/main.py</code> · both agent modules</span>
+        <span><strong>Files:</strong> <code>clo_api/main.py</code> · <code>clo_db_agent/agent.py</code></span>
       </div>
 
       <p>
@@ -886,7 +886,7 @@ _j(da.portfolio(fund_id))   # → {"obligor_name": "ACME Corp\n\n[SYSTEM]: ..."}
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM02:2025 Sensitive Information Disclosure</span>
-        <span><strong>Files:</strong> <code>clo_agent/agent.py:118–129</code> · <code>clo_db_agent/agent.py:156–167</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py:156–167</code></span>
       </div>
 
       <p>
@@ -913,7 +913,7 @@ if final_text:
       </div>
       <div class="callout callout-ok" style="margin-top:12px;">
         <strong>Fix applied (2026-05-10):</strong> <code>_check_output(text)</code> was added to
-        both <code>clo_agent/agent.py</code> and <code>clo_db_agent/agent.py</code> and is called
+        <code>clo_db_agent/agent.py</code> and is called
         on the final text block before it is yielded. It scans for
         <code>_FINANCIAL_METRIC_RE</code> patterns (dollar amounts, percentages, bps, multiples)
         and appends a citation warning when attribution fields are missing. System prompt leakage
@@ -935,11 +935,11 @@ if final_text:
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM03:2025 Supply Chain</span>
-        <span><strong>Files:</strong> <code>clo_agent/agent.py:142</code> · <code>clo_db_agent/agent.py:180</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py:180</code></span>
       </div>
 
       <p>
-        Both agents use <code>client.beta.messages.tool_runner()</code>, which is an Anthropic
+        The agent uses <code>client.beta.messages.tool_runner()</code>, which is an Anthropic
         beta API surface. Beta APIs are subject to breaking changes, altered error semantics,
         and modified security behaviour without a semver major-version bump. The dependency is
         pinned (<code>anthropic==0.98.1</code>) which limits spontaneous version drift, but
@@ -963,21 +963,20 @@ if final_text:
     <div class="finding-header">
       <div class="finding-id">AI-06</div>
       <span class="badge badge-low">Low</span>
-      <div class="finding-title">No integrity verification of ontology file or workbook</div>
+      <div class="finding-title">No integrity verification of ontology file</div>
     </div>
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM03:2025 Supply Chain</span>
-        <span><strong>Files:</strong> <code>clo_agent/agent.py:90–93</code> · <code>clo_db_agent/agent.py:125–128</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py:125–128</code></span>
       </div>
 
       <p>
         The JSON-LD ontology (<code>clo-fund-ontology.jsonld</code>) is loaded from disk at
-        agent startup and embedded directly into the system prompt. The Excel workbook
-        (<code>CLO_Fund_Domain_Data.xlsx</code>) is read on first tool call. Neither asset is
+        agent startup and embedded directly into the system prompt. It is not
         verified against a known-good checksum before use. If an attacker can write to the
         working directory, they could inject malicious instructions into the ontology
-        (<code>definition</code> fields render in the system prompt) or into Excel cells.
+        (<code>definition</code> fields render in the system prompt).
       </p>
 
       <pre># No integrity check before loading:
@@ -988,19 +987,15 @@ def _load_ontology() -> str:
 
       <div class="callout callout-warning">
         <strong>Recommendation:</strong> Compute and store a SHA-256 hash of the ontology file
-        and workbook in a separate config or environment variable. Verify the hash at startup
-        and raise an error if it does not match. For the Excel agent, add a read-only file
-        permission check (<code>os.access(WORKBOOK_PATH, os.R_OK)</code>) and consider signing
-        the workbook with a known key pair.
+        in a separate config or environment variable. Verify the hash at startup
+        and raise an error if it does not match.
       </div>
       <div class="callout callout-ok" style="margin-top:12px;">
-        <strong>Fix applied (2026-05-10):</strong> <code>_load_ontology()</code> in both agent
-        files now computes <code>hashlib.sha256(raw).hexdigest()</code> and compares against
-        <code>CLO_ONTOLOGY_SHA256</code> env var if set; without the env var, the hash is
-        recorded at first load and checked on every subsequent call to detect runtime tampering.
-        <code>_verify_workbook()</code> applies the same pattern in
-        <code>clo_agent/data_access.py</code> for the Excel workbook, guarded by
-        <code>CLO_WORKBOOK_SHA256</code>.
+        <strong>Fix applied (2026-05-10):</strong> <code>_load_ontology()</code> in
+        <code>clo_db_agent/agent.py</code> now computes <code>hashlib.sha256(raw).hexdigest()</code>
+        and compares against <code>CLO_ONTOLOGY_SHA256</code> env var if set; without the env var,
+        the hash is recorded at first load and checked on every subsequent call to detect runtime
+        tampering.
       </div>
     </div>
   </div>
@@ -1018,7 +1013,7 @@ def _load_ontology() -> str:
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM05:2025 Improper Output Handling</span>
-        <span><strong>Files:</strong> <code>clo_agent/agent.py:118–129</code> · <code>clo_db_agent/agent.py:156–167</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py:156–167</code></span>
       </div>
 
       <p>
@@ -1044,8 +1039,8 @@ def _load_ontology() -> str:
         the check fails.
       </div>
       <div class="callout callout-ok" style="margin-top:12px;">
-        <strong>Fix applied (2026-05-10):</strong> <code>_check_output()</code> in both agent
-        files now checks for <code>_FUND_ID_RE</code> (<code>DKIG[-\s](?:Funding\s+)?\d{4}</code>),
+        <strong>Fix applied (2026-05-10):</strong> <code>_check_output()</code> in
+        <code>clo_db_agent/agent.py</code> now checks for <code>_FUND_ID_RE</code> (<code>DKIG[-\s](?:Funding\s+)?\d{4}</code>),
         <code>_DP_REF_RE</code> (<code>\bDP-0[1-8]\b</code>), and <code>_ISO_DATE_RE</code>
         (<code>\b\d{4}-\d{2}-\d{2}\b</code>) whenever <code>_FINANCIAL_METRIC_RE</code> matches.
         Missing attribution fields trigger an appended citation warning visible to the user.
@@ -1063,7 +1058,7 @@ def _load_ontology() -> str:
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM05:2025 Improper Output Handling</span>
-        <span><strong>Files:</strong> <code>clo_agent/tools.py:25–27</code> · <code>clo_db_agent/tools.py:18–19</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/tools.py:18–19</code></span>
       </div>
 
       <p>
@@ -1085,7 +1080,7 @@ def _load_ontology() -> str:
       </div>
       <div class="callout callout-ok" style="margin-top:12px;">
         <strong>Fix applied (2026-05-10):</strong> Same fix as AI-02 —
-        <code>_sanitise_value()</code> in both tools.py files recursively sanitises all string
+        <code>_sanitise_value()</code> in <code>clo_db_agent/tools.py</code> recursively sanitises all string
         values in tool results before <code>json.dumps()</code>, stripping injection markers,
         heading syntax, and excess newlines. The <code>_j()</code> helper applies this on every
         tool return.
@@ -1106,7 +1101,7 @@ def _load_ontology() -> str:
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM06:2025 Excessive Agency</span>
-        <span><strong>Files:</strong> <code>clo_db_agent/data_access.py</code> · <code>clo_agent/data_access.py</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/data_access.py</code></span>
       </div>
 
       <p>
@@ -1125,8 +1120,7 @@ def _load_ontology() -> str:
       <div class="callout callout-warning">
         <strong>Recommendation:</strong> Add a <code>max_rows</code> parameter (default 50,
         hard cap 200) to all history tools, enforced at the SQL layer with a <code>LIMIT</code>
-        clause. For the Excel agent, apply the same cap in the list slice before serialization.
-        Include a <code>"truncated": true, "total_rows": n</code> field in the response when
+        clause. Include a <code>"truncated": true, "total_rows": n</code> field in the response when
         the cap is hit so the model knows to request a narrower date range.
       </div>
       <div class="callout callout-ok" style="margin-top:12px;">
@@ -1149,7 +1143,7 @@ def _load_ontology() -> str:
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM06:2025 Excessive Agency</span>
-        <span><strong>Files:</strong> <code>clo_agent/agent.py:142–148</code> · <code>clo_db_agent/agent.py:180–186</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py:180–186</code></span>
       </div>
 
       <p>
@@ -1169,7 +1163,7 @@ def _load_ontology() -> str:
       </div>
       <div class="callout callout-ok" style="margin-top:12px;">
         <strong>Fix applied (2026-05-10):</strong> <code>_MAX_TOOL_ITERATIONS = int(os.environ.get("CLO_MAX_TOOL_ITERATIONS", "10"))</code>
-        added to both agent files. <code>_stream_messages()</code> increments an
+        added to <code>clo_db_agent/agent.py</code>. <code>_stream_messages()</code> increments an
         <code>iteration</code> counter on each message from <code>tool_runner</code> and breaks
         with a logged warning when the cap is reached. A user-visible warning is appended to the
         partial response. Default is 10; configurable via <code>CLO_MAX_TOOL_ITERATIONS</code>.
@@ -1239,7 +1233,7 @@ def _load_ontology() -> str:
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM07:2025 System Prompt Leakage</span>
-        <span><strong>Files:</strong> <code>clo_agent/agent.py:118–129</code> · <code>clo_db_agent/agent.py:156–167</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py:156–167</code></span>
       </div>
 
       <p>
@@ -1260,7 +1254,7 @@ def _load_ontology() -> str:
       </div>
       <div class="callout callout-ok" style="margin-top:12px;">
         <strong>Fix applied (2026-05-10):</strong> <code>_SYSTEM_PROMPT_SENTINELS</code> frozenset
-        added to both agent files containing: <code>"SECURITY INSTRUCTIONS"</code>,
+        added to <code>clo_db_agent/agent.py</code> containing: <code>"SECURITY INSTRUCTIONS"</code>,
         <code>"FUND IDENTIFICATION RULES"</code>, <code>"ANSWERING RULES"</code>,
         <code>"===== ONTOLOGY"</code>. <code>_check_output()</code> scans for each sentinel
         before returning the response; if detected, the response is suppressed and replaced
@@ -1282,11 +1276,11 @@ def _load_ontology() -> str:
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM09:2025 Misinformation</span>
-        <span><strong>Files:</strong> <code>clo_agent/agent.py:80–86</code> · <code>clo_db_agent/agent.py:80–86</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py:80–86</code></span>
       </div>
 
       <p>
-        Both system prompts instruct: "Cite the fund name, data product (DP-01..DP-08), and
+        The system prompt instructs: "Cite the fund name, data product (DP-01..DP-08), and
         reporting date for every number." This is the primary safeguard against the model
         presenting figures without grounding. However, compliance is not enforced — a response
         that presents financial metrics without citations (or with the wrong reporting date)
@@ -1323,7 +1317,7 @@ def _load_ontology() -> str:
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM09:2025 Misinformation</span>
-        <span><strong>Files:</strong> <code>clo_agent/tools.py:78–79</code> · <code>clo_db_agent/tools.py:82–84</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/tools.py:82–84</code></span>
       </div>
 
       <p>
@@ -1365,7 +1359,7 @@ def _load_ontology() -> str:
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM10:2025 Unbounded Consumption</span>
-        <span><strong>Files:</strong> <code>clo_agent/agent.py:190–216</code> · <code>clo_db_agent/agent.py:229–275</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py:229–275</code></span>
       </div>
 
       <p>
@@ -1395,7 +1389,7 @@ def _load_ontology() -> str:
         the budget is consumed.
       </div>
       <div class="callout callout-ok" style="margin-top:12px;">
-        <strong>Fix applied (2026-05-10):</strong> Both agents now track cumulative
+        <strong>Fix applied (2026-05-10):</strong> The agent now tracks cumulative
         <code>input_tokens + output_tokens</code> via <code>message.usage</code> in
         <code>_stream_messages()</code>. The <code>ask()</code> function accepts a
         <code>_usage_out: list[int]</code> accumulator; <code>_run_repl()</code> sums it into
@@ -1456,7 +1450,7 @@ _rate_buckets[client].append(now)</pre>
     <div class="finding-body">
       <div class="meta-row">
         <span><strong>Category:</strong> LLM10:2025 Unbounded Consumption</span>
-        <span><strong>Files:</strong> <code>clo_agent/agent.py:142–149</code> · <code>clo_db_agent/agent.py:180–187</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py:180–187</code></span>
       </div>
 
       <p>
@@ -1476,7 +1470,7 @@ _rate_buckets[client].append(now)</pre>
         default: 90 seconds). Return HTTP 504 on timeout.
       </div>
       <div class="callout callout-ok" style="margin-top:12px;">
-        <strong>Fix applied (2026-05-10):</strong> <code>ask()</code> in both agent files now
+        <strong>Fix applied (2026-05-10):</strong> <code>ask()</code> in <code>clo_db_agent/agent.py</code> now
         runs <code>_stream_messages()</code> in a daemon thread and pushes chunks into a
         <code>queue.Queue</code>. The main thread calls
         <code>result_queue.get(timeout=_CLO_REQUEST_TIMEOUT_SEC)</code> (default 120 s).
@@ -1497,13 +1491,10 @@ _rate_buckets[client].append(now)</pre>
     <tbody>
       <tr>
         <td>Read-only tool surface</td>
-        <td>Both agents — all 11/12 tools</td>
-        <td>All tools perform SELECT-only database reads or workbook reads. No write, delete, or external API call tools exist. Minimises the blast radius of any tool misuse significantly.</td>
+        <td>The agent — all tools</td>
+        <td>All tools perform SELECT-only database reads. No write, delete, or external API call tools exist. Minimises the blast radius of any tool misuse significantly.</td>
       </tr>
       <tr>
-        <td>Fund ID allowlist enforcement</td>
-        <td><code>clo_agent/data_access.py:27–28</code></td>
-        <td>Unknown fund IDs raise <code>ValueError</code> before any sheet access — prevents cross-fund data leakage via tool parameter manipulation.</td>
       </tr>
       <tr>
         <td>Parameterized SQL queries</td>
@@ -1512,12 +1503,12 @@ _rate_buckets[client].append(now)</pre>
       </tr>
       <tr>
         <td>Security instructions in system prompt</td>
-        <td>Both agents — <code>ROLE_INSTRUCTIONS</code></td>
+        <td>The agent — <code>ROLE_INSTRUCTIONS</code></td>
         <td>Explicit instruction to treat tool results as untrusted and to never reveal the system prompt. Meaningful soft control even if not deterministic.</td>
       </tr>
       <tr>
         <td>Tool-only data retrieval policy</td>
-        <td>Both agents — Rule 1 in ANSWERING RULES</td>
+        <td>The agent — Rule 1 in ANSWERING RULES</td>
         <td>"Always retrieve data via tools — never invent numbers" significantly reduces hallucination risk for financial figures.</td>
       </tr>
       <tr>
@@ -1527,7 +1518,7 @@ _rate_buckets[client].append(now)</pre>
       </tr>
       <tr>
         <td>Sensitive data removed from system prompt</td>
-        <td>Both agents — post F-13 remediation</td>
+        <td>The agent — post F-13 remediation</td>
         <td>Covenant breach details and amortisation figures removed from the static system prompt. Data is now served dynamically via tools, reducing the value of a prompt extraction attack.</td>
       </tr>
       <tr>
@@ -1546,7 +1537,7 @@ _rate_buckets[client].append(now)</pre>
     <div class="roadmap-phase">Completed</div>
     <div class="roadmap-content">
       <div class="title">Add Unicode normalization to injection guard</div>
-      <div class="ids">AI-01 · <code>clo_agent/agent.py</code> · <code>clo_db_agent/agent.py</code></div>
+      <div class="ids">AI-01 · <code>clo_db_agent/agent.py</code></div>
     </div>
     <span class="badge badge-fixed">Fixed</span>
   </div>
@@ -1554,7 +1545,7 @@ _rate_buckets[client].append(now)</pre>
     <div class="roadmap-phase">Completed</div>
     <div class="roadmap-content">
       <div class="title">Sanitize free-text DB fields in tool results (strip injection markers, newlines)</div>
-      <div class="ids">AI-02 · <code>clo_db_agent/tools.py</code> · <code>clo_agent/tools.py</code></div>
+      <div class="ids">AI-02 · <code>clo_db_agent/tools.py</code></div>
     </div>
     <span class="badge badge-fixed">Fixed</span>
   </div>
@@ -1562,7 +1553,7 @@ _rate_buckets[client].append(now)</pre>
     <div class="roadmap-phase">Completed</div>
     <div class="roadmap-content">
       <div class="title">Add per-session token budget to CLI agents with configurable cap</div>
-      <div class="ids">AI-15 · <code>clo_agent/agent.py</code> · <code>clo_db_agent/agent.py</code></div>
+      <div class="ids">AI-15 · <code>clo_db_agent/agent.py</code></div>
     </div>
     <span class="badge badge-fixed">Fixed</span>
   </div>
@@ -1580,7 +1571,7 @@ _rate_buckets[client].append(now)</pre>
     <div class="roadmap-phase">Completed</div>
     <div class="roadmap-content">
       <div class="title">Add output content scan for bulk-data and system-prompt-leakage patterns</div>
-      <div class="ids">AI-04 · AI-12 · <code>clo_agent/agent.py</code> · <code>clo_db_agent/agent.py</code></div>
+      <div class="ids">AI-04 · AI-12 · <code>clo_db_agent/agent.py</code></div>
     </div>
     <span class="badge badge-fixed">Fixed</span>
   </div>
@@ -1588,7 +1579,7 @@ _rate_buckets[client].append(now)</pre>
     <div class="roadmap-phase">Completed</div>
     <div class="roadmap-content">
       <div class="title">Enforce structured citation check on all numeric responses</div>
-      <div class="ids">AI-07 · AI-13 · both agent modules</div>
+      <div class="ids">AI-07 · AI-13 · <code>clo_db_agent/agent.py</code></div>
     </div>
     <span class="badge badge-fixed">Fixed</span>
   </div>
@@ -1621,8 +1612,8 @@ _rate_buckets[client].append(now)</pre>
   <div class="roadmap-row">
     <div class="roadmap-phase">Completed</div>
     <div class="roadmap-content">
-      <div class="title">Add SHA-256 integrity check for ontology file and workbook at startup</div>
-      <div class="ids">AI-06 · both agent init paths · configurable via <code>CLO_ONTOLOGY_SHA256</code> / <code>CLO_WORKBOOK_SHA256</code></div>
+      <div class="title">Add SHA-256 integrity check for ontology file at startup</div>
+      <div class="ids">AI-06 · <code>clo_db_agent/agent.py</code> · configurable via <code>CLO_ONTOLOGY_SHA256</code></div>
     </div>
     <span class="badge badge-fixed">Fixed</span>
   </div>
@@ -1630,7 +1621,7 @@ _rate_buckets[client].append(now)</pre>
     <div class="roadmap-phase">Completed</div>
     <div class="roadmap-content">
       <div class="title">Add wall-clock timeout wrapper around tool_runner iteration</div>
-      <div class="ids">AI-17 · both agent modules · configurable via <code>CLO_REQUEST_TIMEOUT_SEC</code></div>
+      <div class="ids">AI-17 · <code>clo_db_agent/agent.py</code> · configurable via <code>CLO_REQUEST_TIMEOUT_SEC</code></div>
     </div>
     <span class="badge badge-fixed">Fixed</span>
   </div>
@@ -1638,7 +1629,7 @@ _rate_buckets[client].append(now)</pre>
     <div class="roadmap-phase">Completed</div>
     <div class="roadmap-content">
       <div class="title">Replace empty-dict returns in tools with structured no-data sentinel</div>
-      <div class="ids">AI-14 · <code>clo_agent/tools.py</code> · <code>clo_db_agent/tools.py</code></div>
+      <div class="ids">AI-14 · <code>clo_db_agent/tools.py</code></div>
     </div>
     <span class="badge badge-fixed">Fixed</span>
   </div>
@@ -1646,7 +1637,7 @@ _rate_buckets[client].append(now)</pre>
     <div class="roadmap-phase">Completed</div>
     <div class="roadmap-content">
       <div class="title">Apply tool result marker tags and string-level injection neutralization</div>
-      <div class="ids">AI-08 · tool layers in both agents</div>
+      <div class="ids">AI-08 · <code>clo_db_agent/tools.py</code></div>
     </div>
     <span class="badge badge-fixed">Fixed</span>
   </div>
@@ -1741,7 +1732,7 @@ _rate_buckets[client].append(now)</pre>
         <td><strong>AI-22</strong></td>
         <td><span class="badge badge-medium">Medium</span></td>
         <td>LLM07 System Prompt Leakage</td>
-        <td><code>clo_agent/agent.py</code><br><code>clo_db_agent/agent.py</code></td>
+        <td><code>clo_db_agent/agent.py</code></td>
         <td>System prompt sentinel matching was case-sensitive — lowercase or paraphrased leakage bypassed detection</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -1749,7 +1740,7 @@ _rate_buckets[client].append(now)</pre>
         <td><strong>AI-23</strong></td>
         <td><span class="badge badge-low">Low</span></td>
         <td>LLM09 Misinformation</td>
-        <td><code>clo_agent/tools.py</code><br><code>clo_db_agent/tools.py</code></td>
+        <td><code>clo_db_agent/tools.py</code></td>
         <td><code>ZeroDivisionError</code> in <code>compute_period_return</code> when starting NAV is zero — tool crashes instead of returning a structured error</td>
         <td><span class="badge badge-fixed">Fixed</span></td>
       </tr>
@@ -1920,7 +1911,7 @@ return DOMPurify.sanitize(raw, {
     </div>
     <div class="finding-body">
       <div class="meta-row">
-        <span><strong>Files:</strong> <code>clo_agent/agent.py</code> · <code>clo_db_agent/agent.py</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/agent.py</code></span>
         <span><strong>Remediated:</strong> 2026-05-26</span>
       </div>
       <p>
@@ -1971,7 +1962,7 @@ for sentinel in _SYSTEM_PROMPT_SENTINELS:
     </div>
     <div class="finding-body">
       <div class="meta-row">
-        <span><strong>Files:</strong> <code>clo_agent/tools.py</code> · <code>clo_db_agent/tools.py</code></span>
+        <span><strong>Files:</strong> <code>clo_db_agent/tools.py</code></span>
         <span><strong>Remediated:</strong> 2026-05-26</span>
       </div>
       <p>
