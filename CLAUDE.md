@@ -41,13 +41,7 @@ Rules: `E`, `F`, `W`. Line length: 100. `E501` is suppressed in `db/` and `gener
 
 ## Running the Project
 
-**Prerequisites**: Python 3.12+, `uv`, `ANTHROPIC_API_KEY`, PostgreSQL (DB agent and API only).
-
-### Excel Agent (no database required)
-```bash
-uv run python -m clo_agent 'What is the net IRR for DKIG-2024-VII?'   # one-shot
-uv run python -m clo_agent                                              # REPL
-```
+**Prerequisites**: Python 3.12+, `uv`, `ANTHROPIC_API_KEY`, PostgreSQL.
 
 ### PostgreSQL Agent
 ```bash
@@ -87,13 +81,12 @@ Wraps `clo_db_agent` with a FastAPI server that streams responses via Server-Sen
 
 | Package | Backend | Entry Point |
 |---|---|---|
-| `clo_agent/` | Excel (`CLO_Fund_Domain_Data.xlsx`) | `python -m clo_agent` |
 | `clo_db_agent/` | PostgreSQL | `python -m clo_db_agent` |
 | `clo_api/` | PostgreSQL (via `clo_db_agent.data_access`) | `uvicorn clo_api.main:app` |
 | `clo_chat_server.py` | PostgreSQL (via `clo_db_agent`) | `python clo_chat_server.py` |
 | `portfolio_optimizer/` | PostgreSQL (via `clo_db_agent.data_access`) | imported by `clo_db_agent/tools.py` |
 
-Both agents expose the same tool interface (`clo_agent/tools.py`, `clo_db_agent/tools.py`). The only difference is the data access layer. `clo_analytics.py` is a shared module for loan-level computations (WARF, WAS, WAL, loan replacement simulation, return attribution) used by both agents' tool layers.
+`clo_analytics.py` is a shared module for loan-level computations (WARF, WAS, WAL, loan replacement simulation, return attribution) used by the agent's tool layer.
 
 ### Portfolio Optimizer
 
@@ -106,9 +99,9 @@ Pre-filter: only trades that sell a lower-spread position into a higher-spread o
 
 ### Data Products
 
-Eight data products map to Excel sheets and PostgreSQL tables (`dp01_*` … `dp08_*`):
+Eight data products map to PostgreSQL tables (`dp01_*` … `dp08_*`):
 
-| ID | Data Product | Table / Sheet |
+| ID | Data Product | Table |
 |---|---|---|
 | DP-01 | Fund Static Profile | Attribute/Value pairs; flattened to a single dict |
 | DP-02 | Portfolio Snapshot | One row per loan position |
@@ -123,10 +116,10 @@ Eight data products map to Excel sheets and PostgreSQL tables (`dp01_*` … `dp0
 
 | Fund ID | Backend | Notes |
 |---|---|---|
-| `DKIG-2024-VII` | Excel + PostgreSQL | 2024 vintage, reinvesting, 12 monthly snapshots |
-| `DKIG-2016-I` | Excel + PostgreSQL | 2016 vintage, amortising, 40 quarterly snapshots, 1 active covenant breach (CCC bucket at 7.8% vs 7.5% threshold) |
-| `DKIG-2018-CE` | PostgreSQL only | $300M clean energy focus, 97 monthly snapshots |
-| `DKIG-2019-TECH` | PostgreSQL only | $400M technology sector focus, 29 quarterly snapshots; load via `db/load_tech_fund.py` |
+| `DKIG-2024-VII` | PostgreSQL | 2024 vintage, reinvesting, 12 monthly snapshots |
+| `DKIG-2016-I` | PostgreSQL | 2016 vintage, amortising, 40 quarterly snapshots, 1 active covenant breach (CCC bucket at 7.8% vs 7.5% threshold) |
+| `DKIG-2018-CE` | PostgreSQL | $300M clean energy focus, 97 monthly snapshots |
+| `DKIG-2019-TECH` | PostgreSQL | $400M technology sector focus, 29 quarterly snapshots; load via `db/load_tech_fund.py` |
 
 ### Agent Architecture
 
@@ -137,17 +130,13 @@ Eight data products map to Excel sheets and PostgreSQL tables (`dp01_*` … `dp0
 
 **Tool naming convention**: `get_*_latest` tools return the most recent single snapshot; `get_*_history` tools return time-series with optional `start_date`/`end_date` filtering. Use `_latest` for current-state questions, `_history` or `compute_period_return` for trends and period-over-period analysis.
 
-### Excel Agent Data Access
-
-`clo_agent/data_access.py` reads the workbook with `openpyxl`. All 8 data functions are decorated with `@lru_cache(maxsize=4)` — the workbook is read once per fund per session. Headers start at row 4 (rows 1–3 are title/subtitle/blank). Fund sheets are prefixed: `DKIG-2016-I` uses `"2016-"` prefix (e.g. `"2016-DP-01 Static Profile"`).
-
 ### PostgreSQL Data Access
 
 `clo_db_agent/data_access.py` connects to PostgreSQL using the `DATABASE_URL` env var (default: `host=/tmp port=5432 dbname=postgres`). The DB agent discovers funds dynamically from the database — no code change needed when loading additional funds.
 
 ### Synthetic Data Generation
 
-`generate_data.py` regenerates `CLO_Fund_Domain_Data.xlsx` and `clo-fund-ontology.jsonld` from scratch (single fund: DKIG-2024-VII). Run it only when rebuilding the Excel workbook or ontology for development purposes.
+`generate_data.py` regenerates `clo-fund-ontology.jsonld` from scratch. Run it only when rebuilding the ontology for development purposes.
 
 ---
 
@@ -160,7 +149,7 @@ Comment tags in the source map to OWASP LLM Top 10 findings:
 | AI-01 | Input sanitisation: 500-char cap, NFKC normalisation, 17-pattern blocklist (`_sanitise_input` in `agent.py`) |
 | AI-02/AI-08 | Tool result sanitisation: strips injection markers and markdown heading syntax before model re-ingestion (`_to_json()` in `tools.py`) |
 | AI-04/AI-07/AI-12/AI-13 | Output safety: system prompt leakage detection; citation warning when financial figures lack fund/DP/date attribution (`_check_output` in `agent.py`) |
-| AI-06 | Ontology and workbook SHA-256 integrity checks at startup (env vars `CLO_ONTOLOGY_SHA256`, `CLO_WORKBOOK_SHA256`) |
+| AI-06 | Ontology SHA-256 integrity check at startup (env var `CLO_ONTOLOGY_SHA256`) |
 | AI-09 | Row cap on history tool results: `_MAX_HISTORY_ROWS` (default 200), truncation sentinel appended |
 | AI-10 | Tool-call iteration cap per question: `_MAX_TOOL_ITERATIONS` (default 10) |
 | AI-15 | Per-session token budget in REPL: `CLO_SESSION_TOKEN_LIMIT` (default 200,000) with 80% warning |
@@ -174,14 +163,13 @@ API security (tagged F-01…F-20 in `clo_api/main.py`): API key auth (`X-API-Key
 
 | Variable | Default | Component | Purpose |
 |---|---|---|---|
-| `ANTHROPIC_API_KEY` | — | Both agents | Required |
+| `ANTHROPIC_API_KEY` | — | All agents | Required |
 | `PORT` | `7860` | Chat server | HTTP port for the browser chat interface |
-| `CLO_SESSION_TOKEN_LIMIT` | `200000` | Both agents | Max tokens per REPL session |
-| `CLO_REQUEST_TIMEOUT_SEC` | `120` | Both agents | Per-question timeout (s) |
-| `CLO_MAX_TOOL_ITERATIONS` | `10` | Both agents | Max tool-call cycles per question |
-| `CLO_MAX_HISTORY_ROWS` | `200` | Both agents | Max rows returned by history tools |
-| `CLO_ONTOLOGY_SHA256` | *(unset)* | Both agents | Expected SHA-256 of ontology file |
-| `CLO_WORKBOOK_SHA256` | *(unset)* | Excel agent | Expected SHA-256 of workbook |
+| `CLO_SESSION_TOKEN_LIMIT` | `200000` | All agents | Max tokens per REPL session |
+| `CLO_REQUEST_TIMEOUT_SEC` | `120` | All agents | Per-question timeout (s) |
+| `CLO_MAX_TOOL_ITERATIONS` | `10` | All agents | Max tool-call cycles per question |
+| `CLO_MAX_HISTORY_ROWS` | `200` | All agents | Max rows returned by history tools |
+| `CLO_ONTOLOGY_SHA256` | *(unset)* | All agents | Expected SHA-256 of ontology file |
 | `CLO_API_KEY` | *(unset)* | REST API | Required for any shared deployment |
 | `DATABASE_URL` | `host=/tmp port=5432 dbname=postgres` | DB agent, API | PostgreSQL DSN |
 | `CORS_ORIGINS` | `http://localhost:3000,http://localhost:8000` | REST API | Comma-separated allowed origins |
