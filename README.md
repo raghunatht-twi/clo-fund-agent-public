@@ -182,20 +182,7 @@ Compare performance, compliance, and fees across all four funds.
 
 ## Command-Line Interface
 
-Both single-agent backends can also be used directly from the terminal.
-
-### Excel Agent (`clo_agent`)
-
-Reads directly from `CLO_Fund_Domain_Data.xlsx`. No database required. Available funds: `DKIG-2024-VII` and `DKIG-2016-I`.
-
-```bash
-uv run python -m clo_agent 'What is the net IRR for DKIG-2024-VII?'   # one-shot
-uv run python -m clo_agent                                              # interactive REPL
-```
-
-### PostgreSQL Agent (`clo_db_agent`)
-
-Reads from PostgreSQL. Discovers all loaded funds dynamically.
+The `clo_db_agent` can also be used directly from the terminal. Discovers all loaded funds dynamically.
 
 ```bash
 uv run python -m clo_db_agent 'What is the net IRR for DKIG-2024-VII?'   # one-shot
@@ -223,7 +210,7 @@ Set `CLO_API_KEY` to enable API key authentication (required for any shared depl
 
 ## Data Products
 
-All agents expose all 8 data products. The Excel agent reads from `CLO_Fund_Domain_Data.xlsx`; the DB agent and multi-agent system read from the corresponding PostgreSQL tables (`dp01_fund_static_profile` … `dp08_liability_structure`).
+All agents expose all 8 data products, reading from the corresponding PostgreSQL tables (`dp01_fund_static_profile` … `dp08_liability_structure`).
 
 | ID | Data Product | Key Fields |
 |---|---|---|
@@ -251,7 +238,7 @@ Rules: `E`, `F`, `W`. Line length: 100. `E501` is suppressed in `db/` and `gener
 
 ### Regenerating synthetic data
 
-`generate_data.py` regenerates `CLO_Fund_Domain_Data.xlsx` and `clo-fund-ontology.jsonld` from scratch (single fund: DKIG-2024-VII). Run it only when rebuilding the Excel workbook or ontology for development.
+`generate_data.py` regenerates `clo-fund-ontology.jsonld` from scratch. Run it only when rebuilding the ontology for development.
 
 ---
 
@@ -268,7 +255,6 @@ Rules: `E`, `F`, `W`. Line length: 100. `E501` is suppressed in `db/` and `gener
 | `CLO_MAX_TOOL_ITERATIONS` | `10` | All agents | Max tool-call cycles per question |
 | `CLO_MAX_HISTORY_ROWS` | `200` | All agents | Max rows returned per history tool call |
 | `CLO_ONTOLOGY_SHA256` | *(unset)* | All agents | Expected SHA-256 of `clo-fund-ontology.jsonld` |
-| `CLO_WORKBOOK_SHA256` | *(unset)* | Excel agent | Expected SHA-256 of `CLO_Fund_Domain_Data.xlsx` |
 | `CLO_API_KEY` | *(unset)* | REST API | API key callers must send in `X-API-Key` header |
 | `CORS_ORIGINS` | `http://localhost:3000,http://localhost:8000` | REST API | Comma-separated allowed CORS origins |
 | `ENVIRONMENT` | *(unset)* | REST API | Set to `production` to disable `/docs` and `/redoc` |

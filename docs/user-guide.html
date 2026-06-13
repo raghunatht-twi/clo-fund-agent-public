@@ -332,7 +332,7 @@
   <p>A natural-language AI agent for CLO fund analysis — performance, compliance, portfolio analytics, and distribution authorisation across all DKIG-managed funds.</p>
   <div class="badge-row">
     <span class="badge">Claude Sonnet 4.6</span>
-    <span class="badge">PostgreSQL + Excel</span>
+    <span class="badge">PostgreSQL</span>
     <span class="badge">FastAPI REST</span>
     <span class="badge">Multi-Agent</span>
     <span class="badge">Python 3.12+</span>
@@ -344,8 +344,8 @@
   <div class="container">
     <div class="section-label">Introduction</div>
     <h2>What Is the CLO Fund Agent?</h2>
-    <p>The DKIG CLO Fund Agent is an AI-powered analytics system that lets you ask plain-English questions about Collateralised Loan Obligation (CLO) fund data and receive structured, cited answers in seconds. It combines Anthropic's <strong>Claude Sonnet 4.6</strong> model with a structured tool layer that reads from either an Excel workbook or a PostgreSQL database.</p>
-    <p>The system exposes four entry points — a terminal REPL, a one-shot CLI, a REST API, and a browser chat UI — all backed by the same eight canonical data products (DP-01 through DP-08). A separate multi-agent orchestrator handles complex cross-product analysis tasks by dispatching specialist sub-agents in parallel.</p>
+    <p>The DKIG CLO Fund Agent is an AI-powered analytics system that lets you ask plain-English questions about Collateralised Loan Obligation (CLO) fund data and receive structured, cited answers in seconds. It combines Anthropic's <strong>Claude Sonnet 4.6</strong> model with a structured tool layer that reads from a PostgreSQL database.</p>
+    <p>The system exposes four entry points — a command-line interface, a REST API, a browser chat UI, and a multi-agent orchestrator — all backed by the same eight canonical data products (DP-01 through DP-08).</p>
 
     <div class="card-grid">
       <div class="card coral">
@@ -383,7 +383,7 @@
       <li>Python 3.12 or higher</li>
       <li><code>uv</code> package manager (<a href="https://github.com/astral-sh/uv" style="color:var(--teal)">astral-sh/uv</a>)</li>
       <li><strong>ANTHROPIC_API_KEY</strong> environment variable set</li>
-      <li>PostgreSQL (required for the DB agent, REST API, and chat server; not needed for the Excel agent)</li>
+      <li>PostgreSQL (required for the DB agent, REST API, and chat server)</li>
     </ul>
 
     <h3>Installation</h3>
@@ -414,7 +414,7 @@ uv sync</pre>
       <div class="step">
         <div class="step-num">4</div>
         <div class="step-body">
-          <p><strong>(DB agent only) Create the PostgreSQL schema and load fund data</strong></p>
+          <p><strong>Create the PostgreSQL schema and load fund data</strong></p>
           <pre><span class="comment"># Create tables</span>
 psql -h /tmp -d postgres -f db/schema.sql
 
@@ -426,10 +426,6 @@ uv run python db/load_tech_fund.py     <span class="comment"># DKIG-2019-TECH (T
       </div>
     </div>
 
-    <div class="callout">
-      <strong>Tip — Excel agent needs no database</strong>
-      If you only want to query DKIG-2024-VII or DKIG-2016-I and have the <code>CLO_Fund_Domain_Data.xlsx</code> workbook, the Excel agent works with no PostgreSQL setup at all.
-    </div>
   </div>
 </section>
 
@@ -440,15 +436,7 @@ uv run python db/load_tech_fund.py     <span class="comment"># DKIG-2019-TECH (T
     <h2>Entry Points</h2>
     <p>The system provides four ways to interact with fund data. Choose the one that fits your workflow.</p>
 
-    <h3>1 — Excel Agent (no database required)</h3>
-    <p>Reads directly from <code>CLO_Fund_Domain_Data.xlsx</code>. Best for quick exploration of DKIG-2024-VII and DKIG-2016-I without any infrastructure.</p>
-    <pre><span class="comment"># Interactive REPL (recommended for multi-question sessions)</span>
-uv run python -m clo_agent
-
-<span class="comment"># One-shot mode</span>
-uv run python -m clo_agent <span class="str">'What is the net IRR for DKIG-2024-VII?'</span></pre>
-
-    <h3>2 — PostgreSQL Agent</h3>
+    <h3>1 — PostgreSQL Agent</h3>
     <p>Reads from PostgreSQL. Supports all four funds and discovers new funds automatically. The REPL is significantly faster for interactive use due to prompt caching and connection pool reuse.</p>
     <pre><span class="comment"># Interactive REPL</span>
 uv run python -m clo_db_agent
@@ -461,7 +449,7 @@ uv run python -m clo_db_agent <span class="str">'What is the net IRR for DKIG-20
       The REPL warms the Anthropic prompt cache after the first question, keeps the PostgreSQL connection pool open, and maintains a 5-minute in-memory data cache. One-shot starts cold every time and is best for scripted automation.
     </div>
 
-    <h3>3 — REST API</h3>
+    <h3>2 — REST API</h3>
     <p>FastAPI application exposing all eight data products as JSON endpoints. Suitable for integration into dashboards or downstream systems.</p>
     <pre><span class="comment"># Development server</span>
 uv run uvicorn clo_api.main:app --host 127.0.0.1 --port 8000
@@ -471,7 +459,7 @@ uv run gunicorn clo_api.main:app -w 4 -k uvicorn.workers.UvicornWorker \
     --bind 127.0.0.1:8000</pre>
     <p>Swagger UI available at <code>http://127.0.0.1:8000/docs</code> (disabled when <code>ENVIRONMENT=production</code>).</p>
 
-    <h3>4 — Browser Chat UI</h3>
+    <h3>3 — Browser Chat UI</h3>
     <p>Streaming chat interface served over HTTP. Wraps the DB agent with Server-Sent Events for real-time response streaming.</p>
     <pre><span class="comment"># Default port 7860</span>
 uv run python clo_chat_server.py
@@ -480,7 +468,7 @@ uv run python clo_chat_server.py
 PORT=8080 uv run python clo_chat_server.py</pre>
     <p>Open <code>http://localhost:7860</code> in your browser. The agent query endpoint is at <code>/ask</code>.</p>
 
-    <h3>5 — Multi-Agent Orchestrator</h3>
+    <h3>4 — Multi-Agent Orchestrator</h3>
     <p>For complex, multi-product analysis tasks (e.g. full distribution authorisation reports). Dispatches specialist agents in parallel. See the <a href="#multi-agent" style="color:var(--teal)">Multi-Agent</a> section for details.</p>
     <pre>uv run python -m multi_agent</pre>
   </div>
@@ -509,7 +497,7 @@ PORT=8080 uv run python clo_chat_server.py</pre>
         <tbody>
           <tr>
             <td><code>DKIG-2024-VII</code></td>
-            <td>Excel + PostgreSQL</td>
+            <td>PostgreSQL</td>
             <td>Broadly syndicated</td>
             <td>2024</td>
             <td><span class="pill pass">Reinvesting</span></td>
@@ -518,7 +506,7 @@ PORT=8080 uv run python clo_chat_server.py</pre>
           </tr>
           <tr>
             <td><code>DKIG-2016-I</code></td>
-            <td>Excel + PostgreSQL</td>
+            <td>PostgreSQL</td>
             <td>Broadly syndicated</td>
             <td>2016</td>
             <td><span class="pill note">Amortising</span></td>
@@ -629,7 +617,7 @@ PORT=8080 uv run python clo_chat_server.py</pre>
   <div class="container">
     <div class="section-label">Reference</div>
     <h2>Data Products</h2>
-    <p>All fund data is organised into eight canonical data products. Each maps to an Excel worksheet and a PostgreSQL table (<code>dp01_*</code> … <code>dp08_*</code>). Every agent answer cites the relevant data product.</p>
+    <p>All fund data is organised into eight canonical data products. Each maps to a PostgreSQL table (<code>dp01_*</code> … <code>dp08_*</code>). Every agent answer cites the relevant data product.</p>
 
     <div class="table-wrap">
       <table>
@@ -948,7 +936,7 @@ curl -H <span class="str">"X-API-Key: your-secret-key"</span> \
           <tr>
             <td><code>ANTHROPIC_API_KEY</code></td>
             <td><em>Required</em></td>
-            <td>Both agents</td>
+            <td>All agents</td>
             <td>Anthropic API authentication</td>
           </tr>
           <tr>
@@ -960,38 +948,32 @@ curl -H <span class="str">"X-API-Key: your-secret-key"</span> \
           <tr>
             <td><code>CLO_SESSION_TOKEN_LIMIT</code></td>
             <td><code>200000</code></td>
-            <td>Both agents</td>
+            <td>All agents</td>
             <td>Max cumulative tokens per REPL session. A warning is printed at 80%.</td>
           </tr>
           <tr>
             <td><code>CLO_REQUEST_TIMEOUT_SEC</code></td>
             <td><code>120</code></td>
-            <td>Both agents</td>
+            <td>All agents</td>
             <td>Per-question wall-clock timeout in seconds</td>
           </tr>
           <tr>
             <td><code>CLO_MAX_TOOL_ITERATIONS</code></td>
             <td><code>10</code></td>
-            <td>Both agents</td>
+            <td>All agents</td>
             <td>Max tool-call cycles per question</td>
           </tr>
           <tr>
             <td><code>CLO_MAX_HISTORY_ROWS</code></td>
             <td><code>200</code></td>
-            <td>Both agents</td>
+            <td>All agents</td>
             <td>Max rows returned by history tools. A truncation note is appended when the cap is hit.</td>
           </tr>
           <tr>
             <td><code>CLO_ONTOLOGY_SHA256</code></td>
             <td><em>Unset</em></td>
-            <td>Both agents</td>
+            <td>All agents</td>
             <td>Expected SHA-256 of <code>clo-fund-ontology.jsonld</code>. If set, the agent refuses to start if the file hash does not match.</td>
-          </tr>
-          <tr>
-            <td><code>CLO_WORKBOOK_SHA256</code></td>
-            <td><em>Unset</em></td>
-            <td>Excel agent</td>
-            <td>Expected SHA-256 of <code>CLO_Fund_Domain_Data.xlsx</code></td>
           </tr>
           <tr>
             <td><code>CLO_API_KEY</code></td>
